@@ -1,0 +1,90 @@
+<section class="admin-lawyers-section">
+    <div class="py-5">
+        <div class="container">
+            <h2 class="admin-title">Добавить адвоката</h2>
+
+            <form action="/admin/add-lawyer" method="POST" enctype="multipart/form-data" class="news-form">
+            <div class="form-group">
+                <label for="lawyer_image">Фотография:</label>
+                <input type="file" name="lawyer_image" id="lawyer_image" class="photo-input" required>
+            </div>
+
+            <div class="form-group">
+                <label for="lawyer_name">Имя:</label>
+                <input type="text" name="lawyer_name" id="lawyer_name" placeholder="Имя адвоката" required>
+            </div>
+
+            <div class="form-group">
+                <label for="lawyer_title">Краткое описание:</label>
+                <input type="text" name="lawyer_title" id="lawyer_title" placeholder="Краткий заголовок о специалисте" required>
+            </div>
+
+            <div class="form-group">
+                <label for="lawyer_description">Описание:</label>
+                <textarea name="lawyer_description" id="lawyer_description" rows="4" placeholder="Описание адвоката..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="lawyer_experience">Опыт:</label>
+                <textarea name="lawyer_experience" id="lawyer_experience" rows="4" placeholder="Опыт специалиста" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="lawyer_email">Почта:</label>
+                <input type="email" name="lawyer_email" id="lawyer_email" placeholder="Электронная почта" required>
+            </div>
+
+            <div class="form-group">
+            <label>Специализации:</label>
+            <div class="specializations-columns">
+                {{#each specializations}}
+                <label class="checkbox-label">
+                    <input type="checkbox" name="specializations" value="{{this.ls_id}}">
+                    {{this.specialization_name}}
+                </label>
+                {{/each}}
+            </div>
+            </div>
+
+            {{#if errorMessage}}
+                <div class="error-message" style="color: red;">{{errorMessage}}</div>
+            {{/if}}
+
+            <button type="submit" class="create-btn d-block mx-auto">Добавить адвоката</button>
+            </form>
+
+
+            <h2 class="admin-title mt-5">Список адвокатов</h2>
+            <table class="news-table">
+            <thead>
+                <tr>
+                    <th>Имя</th>
+                    <th>Фото</th>
+                    <th>Краткое описание</th>
+                    <th>Описание</th>
+                    <th>Почта</th>
+                    <th>Специализации</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each lawyers}}
+                <tr>
+                    <td>{{this.lawyer_name}}</td>
+                    <td class="narrow-col">{{this.lawyer_image}}</td>
+                    <td>{{this.lawyer_title}}</td>
+                    <td class="short-description">{{this.lawyer_description}}</td>
+                    <td class="narrow-col">{{this.lawyer_email}}</td>
+                    <td>{{this.specializations}}</td>
+                    <td>
+                    <form action="/admin/delete-lawyer/{{this.lawyer_id}}" method="POST">
+                        <button type="submit" class="delete-btn">Удалить</button>
+                    </form>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+            </table>
+        </div>
+    </div>
+</section>

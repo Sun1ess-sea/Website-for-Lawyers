@@ -1,0 +1,89 @@
+/* Стили для иконки */
+.chatbot-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #d4af37;
+    color: white;
+    text-align: center;
+    line-height: 60px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+.chatbot-icon:hover {
+    background-color: #8a7328;
+}
+
+/* Стили для контейнера чат-бота (скрыт по умолчанию) */
+.chatbot-container {
+    position: fixed;
+    bottom: 85px;
+    right: 20px;
+    width: 300px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    z-index: 999;
+    display: flex; /* Важно! Используем flex, чтобы не было проблем с высотой */
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;  /* Изначально невидимый */
+    transition: opacity 0.3s ease-in-out; /* Анимация opacity */
+    pointer-events: none;
+}
+
+.chatbot-container.open {
+    opacity: 1; /* Делаем видимым при добавлении класса .open */
+    pointer-events: auto;
+}
+
+.chat-log {
+    height: 350px; /* Уменьшаем высоту, чтобы оставить место для кнопок */
+    overflow-y: scroll;
+    padding: 10px;
+}
+
+.input-area {
+    padding: 10px;
+    border-top: 1px solid #ccc;
+}
+
+.button-container {
+    width: 100%;
+    padding: 5px;
+    overflow-y: scroll;
+    height: 100px;
+    display: flex; /* Добавляем flex */
+    flex-direction: column; /* Добавляем flex-direction */
+}
+
+.button-container button {
+    width: 100%;
+    margin-bottom: 5px;
+    text-align: center;
+    border-radius: 5px;
+    border: none;
+    padding: 10px;
+}
+
+.message {
+    padding: 8px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.bot-message {
+    background-color: #f0f0f0;
+}
+
+.user-message {
+    background-color: #f8f8ff;
+    text-align: right;
+}

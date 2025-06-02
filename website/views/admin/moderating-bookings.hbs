@@ -1,0 +1,36 @@
+<section class="admin-bookings">
+    <div class="py-5 px-3">
+        <div class="container">
+            <h2 class="section-title text-center">Модерирование записей на консультацию</h2>
+
+            <table class="admin-table">
+            <thead>
+                <tr>
+                <th>Имя клиента</th>
+                <th>Email</th>
+                <th>Телефон</th>
+                <th>Дата</th>
+                <th>Время</th>
+                <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each bookings}}
+                <tr>
+                <td>{{this.client_name}}</td>
+                <td>{{this.client_email}}</td>
+                <td>{{this.client_phone}}</td>
+                <td>{{this.date}}</td>
+                <td>{{this.time}}</td>
+                <td>
+                    <form action="/admin/bookings/delete/{{this.booking_id}}" method="POST" style="display: inline;">
+                    <button type="submit" class="admin-btn-delete">Удалить</button>
+                    </form>
+                </td>
+                </tr>
+                {{/each}}
+            </tbody>
+            </table>
+        </div>
+  </div>
+</section>

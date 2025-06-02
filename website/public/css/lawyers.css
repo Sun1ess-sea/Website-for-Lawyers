@@ -1,0 +1,47 @@
+.lawyers-page {
+    padding-top: 80px;
+    color:#f9f9f9;
+}
+
+.lawyer-card {
+  position: relative;
+  background-color: #fff;
+  border-radius: 12px;
+  transition: box-shadow 0.3s ease;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.lawyer-specializations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.specialization-pill {
+  background-color: transparent;
+  border: 2px solid #d4af37;
+  color: #d4af37;
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: "Monserrat", sans-serif;
+  white-space: nowrap;
+}
+
+.lawyer-card:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.lawyer-photo {
+  width: 300px;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.lawyer-title-text {
+    color: black;
+    font-size: 18px;
+}

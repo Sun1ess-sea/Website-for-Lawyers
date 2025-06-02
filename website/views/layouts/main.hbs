@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ПЕРСПЕКТИВА</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Vollkorn:wght@400;500&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/chatbot.css">
+    <link rel="stylesheet" href="/css/about.css">
+    <link rel="stylesheet" href="/css/contacts.css">
+    <link rel="stylesheet" href="/css/single-news.css">
+    <link rel="stylesheet" href="/css/news.css">
+    <link rel="stylesheet" href="/css/lawyers.css">
+    <link rel="stylesheet" href="/css/single-lawyer.css">
+    <link rel="stylesheet" href="/css/service.css">
+    <link rel="stylesheet" href="/css/admin-login.css">
+    <link rel="stylesheet" href="/css/admin-panel.css">
+    <link rel="stylesheet" href="/css/add-admin.css">
+    <link rel="stylesheet" href="/css/bookings-moder.css">
+    <link rel="stylesheet" href="/css/moder-schedule.css">
+    <link rel="stylesheet" href="/css/admin-content.css">
+    <link rel="stylesheet" href="/css/admin-services.css">
+    <link rel="stylesheet" href="/css/admin-news.css">
+    <link rel="stylesheet" href="/css/admin-reviews.css">
+    <link rel="stylesheet" href="/css/admin-lawyers.css">
+    <link rel="icon" type="image/png" href="/images/favikon.png">
+</head>
+<body class="{{#if isAdminPage}}admin-page{{/if}}" data-is-admin="{{isAdminPage}}">
+
+    {{> header}}
+
+    {{{body}}}
+
+    {{> footer}}
+
+    {{> chatbot}}
+
+    <script src="/js/scriptsChatBot.js"></script>
+    <script src="/js/scriptsHome.js"></script>
+    <script src="/js/scriptsBooking.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

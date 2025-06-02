@@ -1,0 +1,20 @@
+<section class="services-page">
+  <div class="container py-5">
+    <h1 class="text-center mb-5">Юридические специализации</h1>
+
+    <div class="row">
+      {{#each specializations}}
+        <div class="col-md-6 mb-4">
+          <div class="service-card-container">
+            <div class="service-card-title">
+              <h2>{{this.specialization_name}}</h2>
+            </div>
+            <div class="service-card-content">
+              <p>{{this.specialization_description}}</p>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+</section>

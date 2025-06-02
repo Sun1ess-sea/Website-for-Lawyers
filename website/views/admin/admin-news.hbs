@@ -1,0 +1,87 @@
+<section class="admin-news-section">
+    <div class="py-5">
+        <div class="container">
+            <h2 class="admin-title">Добавление новости</h2>
+
+            <form action="/admin/add-news" method="POST" enctype="multipart/form-data" class="news-form">
+                <div class="form-group">
+                    <label for="title">Заголовок:</label>
+                    <input type="text" id="title" name="title" placeholder="Введите заголовок" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Описание:</label>
+                    <textarea id="description" name="description" placeholder="Введите описание" rows="4" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="bookingDate">Дата:</label>
+                    <input type="date" id="bookingDate" name="bookingDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="photo">Фотография:</label>
+                    <input class="photo-input" type="file" id="photo" name="photo" accept="image/png, image/jpeg" required>
+                </div>
+
+                <button type="submit" class="create-btn d-block mx-auto">Создать новость</button>
+            </form>
+
+            <h2 class="admin-title mt-5">Существующие новости</h2>
+            <table class="news-table">
+                <thead>
+                    <tr>
+                        <th>Заголовок</th>
+                        <th>Описание</th>
+                        <th>Фотография</th>
+                        <th>Дата</th>
+                        <th>Удалить</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each newsList}}
+                        <tr>
+                            <td style="width: 20%; max-width: 200px;">{{this.title_news}}</td>
+                            <td style="width: 40%; max-width: 500px; word-wrap: break-word;">
+                            <div class="description-container">
+                                <div class="description-text truncated-description" id="desc-{{this.news_id}}">
+                                {{this.description_news}}
+                                </div>
+                                <button class="toggle-btn" data-id="{{this.news_id}}">Смотреть далее</button>
+                            </div>
+                            </td>
+                            <td><small>{{this.image_news}}</small></td>
+                            <td>{{this.create_date}}</td>
+                            <td>
+                                <form method="POST" action="/admin/delete-news/{{this.news_id}}">
+                                    <button type="submit" class="delete-btn">Удалить</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.toggle-btn');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', function () {
+        const id = this.dataset.id;
+        const desc = document.getElementById(`desc-${id}`);
+
+        desc.classList.toggle('truncated-description');
+
+        if (desc.classList.contains('truncated-description')) {
+          this.textContent = 'Смотреть далее';
+        } else {
+          this.textContent = 'Скрыть';
+        }
+      });
+    });
+  });
+</script>

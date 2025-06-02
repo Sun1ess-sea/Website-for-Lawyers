@@ -1,0 +1,38 @@
+.admin-bookings {
+    color: #f9f9f9;
+    padding-top: 80px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.admin-table th, .admin-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+  color: black;
+}
+
+.admin-table th {
+  background-color: #e1ac0018;
+}
+
+.admin-btn-delete {
+  background-color: #a94442;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.admin-btn-delete:hover {
+  background-color: #843534;
+}
+

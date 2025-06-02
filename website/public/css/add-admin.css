@@ -1,0 +1,48 @@
+.admin-add-form-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 80px;
+  background: #f9f9f9;
+}
+
+.admin-add-form-container {
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 500px;
+}
+
+.admin-add-form-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #d4af37;
+}
+
+.admin-add-form-section button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  background-color: #d4af37;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.admin-add-form-section button[type="submit"]:hover {
+  background-color: #b38f2c;
+}
+
+.admin-login-alert {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+}

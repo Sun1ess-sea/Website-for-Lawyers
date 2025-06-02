@@ -1,0 +1,54 @@
+<section class="admin-login">
+    <div class=" py-5">
+        <div class="admin-login-container">
+            <h2 class="admin-login-title">Вход в админ-панель</h2>
+
+
+
+            <form method="POST" action="/admin/login" class="admin-login-form">
+            <div class="form-group">
+                <label for="username">Логин</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <button type="submit">Войти</button>
+            </form>
+        </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const loginInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+
+    // Валидация логина
+    loginInput.addEventListener('input', function () {
+      let val = this.value;
+      val = val.replace(/\s/g, '');
+      if (val.length > 20) val = val.slice(0, 20);
+      this.value = val;
+    });
+
+    // Валидация пароля
+    passwordInput.addEventListener('input', function () {
+      let val = this.value;
+      val = val.replace(/\s/g, '');
+      if (val.length > 30) val = val.slice(0, 30);
+      this.value = val;
+    });
+
+    // Проверка при отправке формы
+    const form = document.querySelector('.admin-login-form');
+    form.addEventListener('submit', function (e) {
+      const login = loginInput.value.trim();
+      const password = passwordInput.value.trim();
+      // БЫЛ АЛЕРТ, УБРАЛИ
+    });
+  });
+</script>

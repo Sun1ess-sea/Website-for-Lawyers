@@ -1,0 +1,31 @@
+<section class="lawyer-profile-page">
+  <div class="container py-5">
+    <div class="lawyer-single-card d-flex p-4" style="max-width: 900px; margin: 0 auto;">
+      <img src="{{lawyer.lawyer_image}}" alt="{{lawyer.lawyer_name}}" class="lawyer-photo me-4" style="width: 350px; height: 450px;">
+
+      <div class="d-flex flex-column justify-content-between w-100">
+        <div>
+          <h2>{{lawyer.lawyer_name}}</h2>
+          <p class="lawyer-title-text">{{lawyer.lawyer_title}}</p>
+
+          <p><strong>Контакты:</strong> <a href="mailto:{{lawyer.lawyer_email}}">{{lawyer.lawyer_email}}</a></p>
+
+          <div class="lawyer-specializations mt-3">
+            {{#each lawyer.specializations}}
+              <span class="specialization-pill">{{this}}</span>
+            {{/each}}
+          </div>
+
+          <div class="mt-4">
+            <p>{{lawyer.lawyer_description}}</p>
+          </div>
+
+          <div class="mt-4">
+            <h5>Опыт:</h5>
+            {{{nl2brList lawyer.lawyer_experience}}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

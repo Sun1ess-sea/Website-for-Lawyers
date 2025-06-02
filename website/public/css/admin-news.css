@@ -1,0 +1,61 @@
+.admin-news-section {
+    padding-top: 80px;
+    background-color: #f9f9f9;
+}
+
+.truncated-description {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  text-align: justify;
+}
+
+.description-container {
+  position: relative;
+  max-width: 500px;
+  text-align: justify;
+  white-space: pre-line;
+}
+
+.toggle-btn {
+  margin-top: 5px;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  color: white;
+  background-color: #d4af37;
+  border: none;
+  border-radius: 4px;
+}
+
+.toggle-btn:hover {
+  background-color: #8a7328;
+}
+
+/* Контейнер формы */
+.news-form {
+  max-width: 520px;
+  margin: 0 auto 40px auto;
+  padding: 25px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Стили для input файла */
+.news-form .photo-input {
+  font-size: 14px;
+  padding: 6px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  color: #555;
+  background-color: transparent;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.news-table {
+  border-radius: 8px;
+  border: 1px solid;
+}

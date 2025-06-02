@@ -1,0 +1,22 @@
+<section class="services-page">
+  <div class="container py-5">
+    <h1 class="text-center mb-4">Наши услуги</h1>
+
+    <table class="services-table">
+      <thead>
+        <tr>
+          <th>Услуга</th>
+          <th>Стоимость (₽)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each services}}
+        <tr>
+          <td>{{this.service_name}}</td>
+          <td>От {{this.service_price}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</section>

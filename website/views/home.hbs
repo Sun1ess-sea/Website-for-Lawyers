@@ -1,0 +1,285 @@
+<section class="start-section">
+    <div class="start-content">
+        <img src="images/logo.png" alt="Logo" style="width: 150px; height: auto;">
+        <h1>Коллегия адвокатов «Перспектива»</h1>
+        <p>
+            Осуществляем юридические консультации и помощь в делах<br>
+            различной сложности в г. Челябинске
+        </p>
+        <a href="/contacts" class="btn btn-primary start-btn">Получить консультацию</a>
+    </div>
+</div>
+</section>
+
+<section class="deals-section">
+<div class="container my-5 pt-4">
+    <div class="text-center">
+        <img src="images/scales.png" alt="Icon" class="img-fluid mb-3" style="max-width: 100px;">
+        <h1 class="mb-3">Область Экспертизы</h1>
+        <p class="lead">Мы — Коллегия адвокатов и готовы помочь Вам в решении 
+          возникших проблем, оказываем профессиональные юридические услуги в рамках гражданских, 
+          административных и уголовных дел.</p>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="info-container">
+          <img src="images/bank.png" alt="Image 1">
+          <div class="info-title">
+            <h2>Финансы и банковские вопросы</h2>
+          </div>
+          <div class="info-content">
+            <ul>
+              <li>Проверка существующего банковского счета</li>
+              <li>Открытие банковского счета для нового юридического лица</li>
+              <li>Защита активов</li>
+              <li>Корпоративные финансы</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="info-container">
+          <img src="images/corporate.png" alt="Image 2">
+          <div class="info-title">
+            <h2>Корпоративные вопросы</h2>
+          </div>
+          <div class="info-content">
+            <ul>
+              <li>Выбор типа регистрации компании</li>
+              <li>Подготовка и оформление учредительных документов</li>
+              <li>Консультация стартапов</li>
+              <li>Юридическое сопровождение сделок компании</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="info-container">
+          <img src="images/insurance.png" alt="Image 3">
+          <div class="info-title">
+            <h2>Страхование</h2>
+          </div>
+          <div class="info-content">
+            <ul>
+              <li>Консультации по всем видам страхования</li>
+              <li>Помощь в решении споров по страховым вопросам</li>
+              <li>Подготовка претензии и судебного иска</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="info-container">
+          <img src="images/tax1.png" alt="Image 4">
+          <div class="info-title">
+            <h2>Налогообложение</h2>
+          </div>
+          <div class="info-content">
+            <ul>
+              <li>Подготовка к налоговым проверкам и их сопровождение</li>
+              <li>Налоговое планирование и структуризация системы</li>
+              <li>Консультации по косвенным налогам</li>
+              <li>Налогообложение сделок</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+</section>
+
+
+<section class="info-block"> <!-- СЕКЦИЯ ИНФОРМАЦИИ -->
+    <div class="container text-center text-light">
+        <div class="row">
+            <div class="col-md-4 info-item">
+                <h1 data-target="8">0</h1>
+                <p>лет успешной юридической практики</p>
+            </div>
+            <div class="col-md-4 info-item">
+                <h1 data-target="256">0</h1>
+                <p>среднее количество консультаций в месяц</p>
+            </div>
+            <div class="col-md-4">
+                <h1 data-target="2783">0</h1>
+                <p>успешных дел, проведенных специалистами нашей фирмы</p>
+            </div>
+        </div>
+    </div> 
+</section>
+
+
+<section class="employees-section">
+  <div class="container text-center py-5">
+    <h1 class="mb-4">Профи в юридическом деле</h1>
+    <p class="lead mb-5">Каждый из них найдет лучшее решение Вашей проблемы.</p>
+
+    <div class="carousel-buttons">
+      <button class="carousel-prev"><i class="fa-solid fa-chevron-left"></i></button>
+      <button class="carousel-next"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+
+    <div class="owl-carousel owl-theme">
+      {{#each lawyers}}
+        <div class="item">
+          <div class="card">
+            <img src="{{this.lawyer_image}}" class="card-img-top" alt="{{this.lawyer_name}}">
+            <div class="card-body">
+              <h5 class="card-title">{{this.lawyer_name}}</h5>
+              <p class="card-text">{{this.lawyer_title}}</p>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+</section>
+
+
+<section class = "why-us"> <!-- СЕКЦИЯ ПРИЕМУЩЕСТВА -->
+  <div class="container my-5">
+      <div class="text-center">
+          <h1 class="mb-3">Наши преимущества</h1>
+          <p class="lead">Клиенты доверяют нам в самых сложных вопросах, потому что знают, что мы поможем им снизить риски для бизнеса.</p>
+      </div>
+      <div class="row row-ph1 text-center mt-5">
+          <div class="col-md-4 mb-4">
+              <img src="images/1.png" alt="Годы практики" class="img-fluid mb-3" style="max-width: 80px;">
+              <h4>Годы практики</h4>
+              <div class="line"></div>
+              <p>Все наши специалисты имеют опыт юридической практики не менее 5 лет.</p>
+          </div>  
+          <div class="col-md-4 mb-4">
+              <img src="images/3.png" alt="Персональный подход" class="img-fluid mb-3" style="max-width: 80px;">
+              <h4>Персональный подход</h4>
+              <div class="line"></div>
+              <p>Индивидуальная работа с каждым клиентом позволяет решать даже самые сложные проблемы.</p>
+          </div>
+          <div class="col-md-4 mb-4">
+              <img src="images/4.png" alt="Отличный сервис" class="img-fluid mb-3" style="max-width: 80px;">
+              <h4>Отличный сервис</h4>
+              <div class="line"></div>
+              <p>Мы занимаем лидирующие позиции на рынке юридических услуг, так как предоставляем качественный сервис и ценим наших клиентов.</p>
+          </div>
+          <div class="col-md-4 mb-4">
+              <img src="images/5.png" alt="Эффективность" class="img-fluid mb-3" style="max-width: 80px;">
+              <h4>Эффективность</h4>
+              <div class="line"></div>
+              <p>На каждое дело мы выделяем специалиста, который единовременно работает только с вашей компанией.</p>
+          </div>
+          <div class="col-md-4 mb-4">
+              <img src="images/6.png" alt="Выгода" class="img-fluid mb-3" style="max-width: 80px;">
+              <h4>Выгода</h4>
+              <div class="line"></div>
+              <p>У нас фиксированные цены на стандартные услуги, поэтому вы всегда знаете, за что платите.</p>
+          </div>
+          <div class="col-md-4 mb-4">
+              <img src="images/2.png" alt="Конфиденциальность" class="img-fluid mb-3" style="max-width: 80px;">
+              <h4>Конфиденциальность</h4>
+              <div class="line"></div>
+              <p>В начале работы мы заключаем договор о неразглашении. Ваша частная информация не покинет пределов нашего офиса.</p>
+          </div>
+      </div>
+  </div>
+</section>
+
+
+<section class="reviews">
+  <div class="container">
+    <div class="text-center">
+      <h1 class="pb-3">Наши отзывы</h1>
+      <p class="lead pb-3">
+        Клиенты доверяют нам в самых сложных вопросах, потому что знают, что мы поможем им снизить риски для бизнеса.
+      </p>
+    </div>
+    <div class="reviews-container d-flex justify-content-center align-items-center">
+      <div class="carousel-card">
+        <div id="carouselReviews" class="carousel slide" data-bs-ride="carousel" data-bs-interval="8000">
+            <div class="carousel-inner">
+                {{#each reviews}}
+                <div class="carousel-item {{#if @first}}active{{/if}}">
+                    <img src="{{this.image_review}}" class="carousel-image" alt="Отзыв">
+                    <div class="carousel-text">
+                    <h5>{{this.title_review}}</h5>
+                    <p>{{this.description_review}}</p>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+
+            <!-- Кнопки-переключатели -->
+            <div class="carousel-indicators">
+            {{#each reviews}}
+                <button 
+                type="button" 
+                data-bs-target="#carouselReviews" 
+                data-bs-slide-to="{{@index}}"
+                class="{{#if @first}}active{{/if}}" 
+                aria-label="Слайд">
+                </button>
+            {{/each}}
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="news-section">
+    <div class="container text-center py-5">
+        <h1 class="mb-4">НОВОСТИ</h1>
+        <p class="mb-4 news-p">Наши последние новости собраны для Вас!</p>
+        <div class="row">
+                {{#each news}}
+                    <div class="col-md-4 mb-4">
+                        <div class="news-card">
+                            <img src="{{image_news}}" alt="Новость" class="mb-1">
+                            <p class="news-date">{{date}}</p>
+                            <a href="/news/{{news_id}}" class="news-description">{{title_news}}</a>
+                            <a href="/news/{{news_id}}" class="btn btn-primary news-button mt-1">Читать далее</a>
+                        </div>
+                    </div>
+                {{/each}}
+        </div>
+    </div>
+</section>
+    
+
+<section class = "consult-section" id="consult-section">
+<div class="container-fluid d-flex align-items-center justify-content-center min-vh-100 bg-overlay">
+    <div class="text-center text-white form-container">
+        <h2>Отправьте нам ваш вопрос и мы ответим</h2>
+        <p class="mb-2">Наш специалист свяжется с вами в ближайшее время.</p>
+        <form action="/submit" method="post">
+        <div class="mb-3">
+            <input type="email" pattern="[a-zA-Z0-9._%+-]{2,}+@[a-zA-Z0-9.-]{2,}+\.[a-zA-Z]{2,4}" inputmode="email" class="form-control" name="req_email" placeholder="Ваш Email name@example.com" required>
+        </div>
+        <div class="mb-3">
+            <input pattern="8[0-9]{10}" inputmode="numeric" maxlength="11" class="form-control" name="req_phone" placeholder="Ваш номер телефона 8 (***) ***-**-**" required>
+        </div>
+        <div class="mb-3">
+            <input pattern="[а-яА-Яa-zA-Z\s]{2,}" inputmode="text" class="form-control" name="req_name" placeholder="Ваше полное ФИО" required>
+        </div>
+        <div class="mb-3">
+            <textarea class="form-control" name="req_message" rows="5" placeholder="Опишите свою проблему" style="resize: vertical;" required></textarea>
+        </div>
+        <div class="form-check mb-3 text-start">
+            <input type="checkbox" class="form-check-input" name="privacy_policy" id="privacy_policy" required>
+            <label class="form-check-label" for="privacy_policy">
+                Подтвердите, что согласны на <a href="/docs/personal-data-consent.docx" target="_blank" download>обработку персональных данных</a>
+            </label>
+        </div>
+        <button type="submit" class="btn btn-primary send-btn w-100 mb-3">Отправить!</button>
+        </form>
+        <label class="form-check-label mb-0" for="privacy_policy">
+                Убедитесь, что ознакомились с <a href="/docs/privacy-policy.docx" target="_blank" download>политикой конфиденциальности</a>!
+        </label>
+    </div>
+</div>
+</section>

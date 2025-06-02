@@ -1,0 +1,378 @@
+<section class="schedule-page">
+  <div class="py-5 px-4">
+    <div class="container">
+      <h2>Расписание консультаций адвокатов</h2>
+
+      <form id="scheduleForm" method="POST" action="/admin/moder-schedule/add">
+        <input type="hidden" name="schedule_id" id="schedule_id">
+        <div class="form-group">
+          <label for="specialization">Выберите специализацию:</label>
+          <select id="specialization" required>
+            <option value="">Выберите специализацию</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="lawyer">Выберите адвоката:</label>
+          <select id="lawyer" name="lawyer_id" required disabled>
+            <option value="">Сначала выберите специализацию</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="bookingDate">Дата:</label>
+          <input type="date" id="bookingDate" name="bookingDate" required>
+        </div>
+
+        <div class="form-group">
+          <div class="time-header">
+            <label>Время:</label>
+            <div class="time-buttons">
+              <button type="button" id="addTimeBtn" class="add-time">+</button>
+              <button type="button" id="removeTimeBtn" class="remove-time" disabled>−</button>
+            </div>
+          </div>
+
+          <div id="timeContainer">
+            {{#if errorMessage}}
+              <div id="errorMessage" style="color: #a94442; margin-bottom: 10px;">
+                {{errorMessage}}
+              </div>
+            {{else}}
+              <div id="errorMessage" style="display:none; color: #a94442; margin-bottom: 10px;"></div>
+            {{/if}}
+            <div class="time-input">
+              <input type="time" name="times[]" required>
+            </div>
+          </div>
+        </div>
+        <div class="position-relative w-100">
+          <div class="d-flex justify-content-center">
+            <button type="submit">Создать расписание</button>
+          </div>
+          <div>
+            <button type="button" id="resetForm" class="clearBtn position-absolute end-0 top-0">Очистить форму</button>
+          </div>
+        </div>
+
+      </form>
+
+      <hr>
+
+      <h3>Существующие расписания</h3>
+      <div class="filterContainer">
+        <label for="lawyerFilter">Адвокат:</label>
+        <select id="lawyerFilter">
+          <option value="">Все</option>
+          <!-- Здесь динамически добавятся адвокаты -->
+        </select>
+
+        <label for="dateFrom">Дата от:</label>
+        <input type="date" id="dateFrom">
+
+        <label for="dateTo">Дата до:</label>
+        <input type="date" id="dateTo">
+
+        <button id="filterBtn" class="moder-schedule-filterBtn">Применить</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Адвокат</th>
+            <th>Дата</th>
+            <th>Время</th>
+            <th>Статус</th>
+            <th>Действия</th>
+          </tr>
+        </thead>
+        <tbody id="scheduleTableBody">
+          <!-- Расписания сюда -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  // --- Твой существующий код ---
+
+  const specSelect = document.getElementById('specialization');
+  const lawyerSelect = document.getElementById('lawyer');
+
+  // Получаем специализации
+  const specRes = await fetch('/admin/specializations');
+  const specs = await specRes.json();
+
+  specs.forEach(spec => {
+    const option = document.createElement('option');
+    option.value = spec.ls_id;
+    option.textContent = spec.specialization_name;
+    specSelect.appendChild(option);
+  });
+
+  // Слушаем выбор специализации
+  specSelect.addEventListener('change', async () => {
+    const ls_id = specSelect.value;
+
+    lawyerSelect.innerHTML = '';
+    lawyerSelect.disabled = true;
+
+    if (!ls_id) return;
+
+    const res = await fetch(`/admin/lawyers/by-specialization/${ls_id}`);
+    const lawyers = await res.json();
+
+    if (lawyers.length === 0) {
+      const opt = document.createElement('option');
+      opt.textContent = 'Нет адвокатов для этой специализации';
+      lawyerSelect.appendChild(opt);
+    } else {
+      const defaultOpt = document.createElement('option');
+      defaultOpt.textContent = 'Выберите адвоката';
+      defaultOpt.value = '';
+      lawyerSelect.appendChild(defaultOpt);
+
+      lawyers.forEach(lawyer => {
+        const option = document.createElement('option');
+        option.value = lawyer.lawyer_id;
+        option.textContent = lawyer.lawyer_name;
+        lawyerSelect.appendChild(option);
+      });
+
+      lawyerSelect.disabled = false;
+    }
+  });
+
+  // === Управление временными слотами ===
+  const timeContainer = document.getElementById('timeContainer');
+  const addBtn = document.getElementById('addTimeBtn');
+  const removeBtn = document.getElementById('removeTimeBtn');
+  const maxTimes = 5;
+
+  const updateButtons = () => {
+    const inputs = timeContainer.querySelectorAll('input[type="time"]');
+    addBtn.disabled = inputs.length >= maxTimes;
+    removeBtn.disabled = inputs.length <= 1;
+  };
+
+  addBtn.addEventListener('click', () => {
+    const inputs = timeContainer.querySelectorAll('input[type="time"]');
+    if (inputs.length < maxTimes) {
+      const div = document.createElement('div');
+      div.className = 'time-input';
+      div.innerHTML = `<input type="time" name="times[]" required>`;
+      timeContainer.appendChild(div);
+      updateButtons();
+    }
+  });
+
+  removeBtn.addEventListener('click', () => {
+    const inputs = timeContainer.querySelectorAll('input[type="time"]');
+    if (inputs.length > 1) {
+      timeContainer.removeChild(inputs[inputs.length - 1].parentElement);
+      updateButtons();
+    }
+  });
+
+  updateButtons();
+
+  // === Проверка дублей при отправке формы ===
+  const errorDiv = document.getElementById('errorMessage');
+  const form = document.getElementById('scheduleForm');
+
+  form.addEventListener('submit', (e) => {
+    if (errorDiv) {
+      errorDiv.style.display = 'none';
+      errorDiv.textContent = '';
+    }
+
+    const timeInputs = Array.from(timeContainer.querySelectorAll('input[type="time"]'));
+    const timeValues = timeInputs.map(input => input.value.trim());
+    const duplicates = timeValues.filter((val, idx, arr) => arr.indexOf(val) !== idx);
+
+    if (duplicates.length > 0) {
+      e.preventDefault();
+      if (errorDiv) {
+        errorDiv.textContent = 'Вы указали дублирующееся время. Удалите повторы перед отправкой.';
+        errorDiv.style.display = 'block';
+      }
+    }
+  });
+
+  // === Опциональная кнопка сброса формы ===
+  const resetBtn = document.getElementById("resetForm");
+  if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+      form.reset();
+      document.getElementById("schedule_id").value = "";
+      form.action = "/admin/moder-schedule/add";
+      form.querySelector("button[type=submit]").textContent = "Создать расписание";
+      document.querySelector("h2").textContent = "Расписание консультаций адвокатов";
+
+      timeContainer.innerHTML = `
+        <div class="time-input">
+          <input type="time" name="times[]" required>
+        </div>
+      `;
+      updateButtons();
+    });
+  }
+
+
+  // --- Новый код для фильтрации расписаний и загрузки адвокатов для фильтра ---
+
+  async function loadFilterLawyers() {
+    try {
+      const res = await fetch('/admin/lawyers');
+      if (!res.ok) throw new Error('Ошибка загрузки адвокатов');
+      const data = await res.json();
+
+      const filterSelect = document.getElementById('lawyerFilter');
+      if (!filterSelect) return;
+
+      // Очищаем, кроме первого (Все)
+      filterSelect.length = 1;
+      
+      data.lawyers.forEach(lawyer => {
+        const option = document.createElement('option');
+        option.value = lawyer.id;
+        option.textContent = lawyer.name;
+        filterSelect.appendChild(option);
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  // --- Функция загрузки расписаний ---
+  async function loadSchedules() {
+    const lawyerId = document.getElementById('lawyerFilter').value;
+    const dateFrom = document.getElementById('dateFrom').value;
+    const dateTo = document.getElementById('dateTo').value;
+
+    const params = new URLSearchParams();
+    if (lawyerId) params.append('lawyer_id', lawyerId);
+    if (dateFrom) params.append('date_from', dateFrom);
+    if (dateTo) params.append('date_to', dateTo);
+
+    try {
+      const res = await fetch('/admin/schedules?' + params.toString());
+      if (!res.ok) throw new Error('Ошибка загрузки расписаний');
+      const data = await res.json();
+
+      const tbody = document.getElementById('scheduleTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      data.schedules.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${item.lawyer_name}</td>
+        <td>${item.date}</td>
+        <td>${item.time}</td>
+        <td>${item.status ? 'Занято' : 'Свободно'}</td>
+        <td>
+          <div class="d-flex justify-content-around">
+            <button class="edit-btn" data-item='{{json this}}'>Изменить</button>
+            <button class="delete-btn">Удалить</button>
+          </div>
+        </td>
+      `;
+
+      const deleteBtn = tr.querySelector('.delete-btn');
+      const editBtn = tr.querySelector('.edit-btn');
+
+      if (item.status) {
+        deleteBtn.disabled = true;
+        deleteBtn.title = 'Нельзя удалить занятое расписание. Сначала удалите запись клиента.';
+        editBtn.disabled = true;
+        editBtn.title = 'Нельзя изменить занятое расписание.';
+      } else {
+        deleteBtn.disabled = false;
+        deleteBtn.addEventListener('click', async () => {
+          const confirmDelete = await Swal.fire({
+            text: 'Вы уверены, что хотите удалить это расписание?',
+            icon: 'warning',
+            showCancelButton: true,
+            iconColor: '#a94442',
+            confirmButtonColor: '#a94442',
+            cancelButtonColor: '#d4af37',
+            confirmButtonText: 'Удалить',
+            cancelButtonText: 'Отмена',
+            scrollbarPadding: false
+          });
+
+          if (confirmDelete.isConfirmed) {
+            try {
+              const res = await fetch(`/admin/schedules/${item.schedule_id}`, {
+                method: 'DELETE'
+              });
+              if (!res.ok) throw new Error('Ошибка при удалении');
+              await Swal.fire('Удалено!', 'Расписание было удалено.', 'success');
+              loadSchedules();
+            } catch (err) {
+              console.error(err);
+              Swal.fire('Ошибка', 'Не удалось удалить расписание', 'error');
+            }
+          }
+        });
+
+        editBtn.addEventListener('click', () => {
+          const data = item; // это и есть объект расписания
+
+          // Подставить значения в форму
+          document.getElementById("lawyer").value = data.lawyer_id;
+          document.getElementById("bookingDate").value = data.date;
+          document.getElementById("schedule_id").value = data.schedule_id;
+
+          // Вставить input'ы времени
+          const times = data.time.split(",");
+          const timeContainer = document.getElementById("timeContainer");
+          timeContainer.innerHTML = "";
+          times.forEach(time => {
+            const div = document.createElement("div");
+            div.className = "time-input";
+            div.innerHTML = `<input type="time" name="times[]" value="${time.trim()}" required>`;
+            timeContainer.appendChild(div);
+          });
+
+          // Обновить кнопки
+          updateButtons(); // если у тебя есть функция динамического добавления полей времени
+
+          document.getElementById('addTimeBtn').disabled = true;
+          document.getElementById('removeTimeBtn').disabled = true;
+
+          // Обновить внешний вид формы
+          const form = document.getElementById("scheduleForm");
+          form.action = "/admin/moder-schedule/edit";
+          form.querySelector("button[type=submit]").textContent = "Сохранить изменения";
+          document.querySelector("h2").textContent = "Редактирование расписания";
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      tbody.appendChild(tr);
+    });
+
+    } catch (err) {
+      console.error(err);
+      Swal.fire('Ошибка', 'Ошибка при загрузке расписаний', 'error');
+    }
+  }
+
+  // --- Загрузка адвокатов и расписаний ---
+  await loadFilterLawyers();
+  await loadSchedules();
+
+  // --- Обработчик кнопки фильтра ---
+  const filterBtn = document.getElementById('filterBtn');
+  if (filterBtn) {
+    filterBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      loadSchedules();
+    });
+  }
+});
+</script>

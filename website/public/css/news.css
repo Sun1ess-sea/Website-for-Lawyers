@@ -1,0 +1,23 @@
+.news-page-section {
+    padding-top: 147px;
+    color:#f9f9f9;
+}
+
+.pagination .page-link {
+  color: #d4af37;
+  border: 1px solid #8a7328;
+  background-color: #fff;
+  font-family: "Monserrat";
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.pagination .page-link:hover {
+  background-color: #d4af37;
+  color: #fff;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #d4af37;
+  border-color: #8a7328;
+  color: #fff;               
+}

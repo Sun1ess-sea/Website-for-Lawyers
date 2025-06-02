@@ -1,0 +1,17 @@
+<section class="single-news-section">
+  <div class="container py-5">
+    <h1 class="mb-2">{{news.title_news}}</h1>
+    <p class="single-news-date mb-2">{{news.date}}</p>
+
+    <div class="single-news-content">
+      <div class="single-news-image">
+        <img src="{{news.image_news}}" alt="Новость">
+      </div>
+      <div class="single-news-text lead">
+        {{{nl2br news.description_news}}}
+      </div>
+    </div>
+
+    <a href="/news" class="btn btn-primary mt-3">← Вернуться к новостям</a>
+  </div>
+</section>

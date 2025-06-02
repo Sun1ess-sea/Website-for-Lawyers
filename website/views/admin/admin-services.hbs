@@ -1,0 +1,116 @@
+<section class="services-page">
+    <div class="py-5">
+        <div class="container">
+            <h2>{{#if editService}}Редактирование услуги{{else}}Добавление услуги{{/if}}</h2>
+
+            <form action="{{#if editService}}/admin/update-service/{{editService.service_id}}{{else}}/admin/admin-services{{/if}}" method="POST" class="add-service-form mx-auto">
+            <div class="form-group">
+                <label for="service_name">Наименование услуги:</label>
+                <input 
+                type="text" 
+                id="service_name" 
+                name="service_name"
+                placeholder="Консультация"
+                required
+                value="{{#if editService}}{{editService.service_name}}{{/if}}"
+                >
+                <small id="nameError" class="text-danger" style="display:none;">
+                    Наименование должно содержать минимум 5 символов
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label for="service_price">Стоимость:</label>
+                <input 
+                type="number" 
+                id="service_price" 
+                name="service_price" 
+                placeholder="5000"
+                required
+                value="{{#if editService}}{{editService.service_price}}{{/if}}"
+                >
+                <small id="priceError" class="text-danger" style="display:none;">
+                    Введите корректную стоимость от 10 до 999999
+                </small>
+            </div>
+            {{#if errorMessage}}
+                <div class="error-message" style="color: red; margin-bottom: 20px;">{{errorMessage}}</div>
+            {{/if}}
+
+            <button type="submit" class="create-btn" id="submitBtn" disabled>
+                {{#if editService}}Сохранить изменения{{else}}Создать{{/if}}
+            </button>
+            </form>
+
+            <h2 class="services-table-title">Существующие услуги</h2>
+            <table class="services-table">
+                <thead>
+                    <tr>
+                    <th>Услуга</th>
+                    <th>Стоимость (₽)</th>
+                    <th>Изменить</th>
+                    <th>Удалить</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each services}}
+                    <tr>
+                    <td>{{this.service_name}}</td>
+                    <td>От {{this.service_price}}</td>
+                    <td>
+                        <form method="GET" action="/admin/admin-services/edit/{{this.service_id}}">
+                        <button class="edit-btn" type="submit">Изменить</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="POST" action="/admin/delete-service/{{this.service_id}}">
+                        <button class="delete-btn" type="submit">Удалить</button>
+                        </form>
+                    </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+
+        </div>
+  </div>
+</section>
+
+<script>
+    const nameInput = document.getElementById('service_name');
+    const nameError = document.getElementById('nameError');
+
+    const priceInput = document.getElementById('service_price');
+    const priceError = document.getElementById('priceError');
+
+    const submitBtn = document.getElementById('submitBtn');
+
+    function validateForm() {
+        const nameValid = nameInput.value.trim().length >= 5;
+        const priceVal = priceInput.value.replace(/\D/g, '').replace(/^0+/, '');
+        const priceValid = priceVal.length >= 2 && priceVal.length <= 6 && parseInt(priceVal) > 0;
+
+        nameError.style.display = nameValid ? 'none' : 'block';
+        priceError.style.display = priceValid ? 'none' : 'block';
+
+        submitBtn.disabled = !(nameValid && priceValid);
+    }
+
+    nameInput.addEventListener('input', () => {
+        validateForm();
+    });
+
+    priceInput.addEventListener('input', () => {
+        let val = priceInput.value.replace(/\D/g, ''); // удаляем всё кроме цифр
+        val = val.replace(/^0+/, ''); // удаляем начальные нули
+        if (val.length > 6) val = val.slice(0, 6); // максимум 6 цифр
+        priceInput.value = val;
+
+        validateForm();
+    });
+
+    // При загрузке страницы тоже запускаем проверку, если вдруг поля предзаполнены
+    document.addEventListener('DOMContentLoaded', () => {
+        validateForm();
+    });
+</script>

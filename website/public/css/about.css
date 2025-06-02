@@ -1,0 +1,108 @@
+.about-section {
+  padding-top: 130px;
+  padding-bottom: 50px;
+  background-color: #f9f9f9;
+}
+
+.about-section h1,
+.about-section h3 {
+  font-family: 'Playfair Display', serif;
+  color: #d4af37;
+  text-align: center;
+}
+
+.about-section p,
+.about-section li {
+  font-family: 'Vollkorn', serif;
+  color: #444;
+  font-size: 20px;
+  line-height: 1.7;
+}
+
+.about-btn {
+  font-size: 20px;
+}
+
+.about-card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  margin: 0 100px;
+}
+
+/* Блоки со списками */
+.list-container {
+  text-align: center;
+  padding: 0 30px;
+}
+
+.list-container ul {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+  font-size: 20px;
+}
+
+/* Вертикальная линия между списками */
+.row.position-relative::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background-color: #d4af37;
+  transform: translateX(-50%);
+  z-index: 0;
+}
+
+@media (max-width: 991.98px) {
+  .row.position-relative {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+
+  .about-card {
+    margin: 0 40px;
+    padding: 30px;
+  }
+
+  .list-container {
+    padding: 0 20px;
+  }
+
+  /* Убираем нижний отступ только у нижнего блока */
+  .row.position-relative .list-container:last-child {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .row.position-relative {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .row.position-relative::before {
+    display: none;
+  }
+
+  .list-container {
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid #d4af37;
+    border-radius: 8px;
+    width: 100%;
+  }
+
+  /* Убираем нижний отступ у нижнего блока */
+  .row.position-relative .list-container:last-child {
+    margin-bottom: 0;
+  }
+
+  .about-card {
+    margin: 0 20px;
+    padding: 25px;
+  }
+}

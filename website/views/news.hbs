@@ -1,0 +1,51 @@
+<section class="news-page-section">
+    <div class="container text-center pb-5">
+        <div class="row">
+        {{#if news.length}}
+            {{#each news}}
+            <div class="col-md-4 mb-4">
+                <div class="news-card">
+                <img src="{{this.image_news}}" alt="Новость" class="news-image img-fluid mb-1">
+                <p class="news-date">{{this.date}}</p>
+                <a href="/news/{{this.news_id}}" class="news-description">{{this.title_news}}</a>
+                <a href="/news/{{this.news_id}}" class="btn btn-primary news-button mt-1">Читать далее</a>
+                </div>
+            </div>
+            {{/each}}
+        {{else}}
+            <div class="col-12">
+            <p class="lead">Пока нет новостей для отображения.</p>
+            </div>
+        {{/if}}
+        </div>
+
+        {{!-- Пагинация --}}
+        {{#if (gt totalPages 1)}}
+            <nav aria-label="Постраничная навигация">
+                <ul class="pagination justify-content-center mt-4">
+                    {{#if (gt currentPage 1)}}
+                        <li class="page-item">
+                        <a class="page-link" href="?page={{subtract currentPage 1}}" aria-label="Предыдущая страница">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                        </li>
+                    {{/if}}
+
+                    {{#each (pagination totalPages currentPage)}}
+                        <li class="page-item {{#if active}}active{{/if}}">
+                        <a class="page-link" href="?page={{number}}">{{number}}</a>
+                        </li>
+                    {{/each}}
+
+                    {{#if (lt currentPage totalPages)}}
+                        <li class="page-item">
+                        <a class="page-link" href="?page={{add currentPage 1}}" aria-label="Следующая страница">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                        </li>
+                    {{/if}}
+                </ul>
+            </nav>
+        {{/if}}
+    </div>
+</section>

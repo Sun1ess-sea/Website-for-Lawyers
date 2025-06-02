@@ -1,0 +1,56 @@
+<section class="admin-add-form-section">
+    <div class="py-5">
+        <div class="admin-add-form-container">
+            <h2>Добавление администратора</h2>
+
+            <form method="POST" action="/admin/add-admin" id="adminAddForm">
+            <div class="form-group">
+                <label for="login">Логин</label>
+                <input type="text" id="login" name="login" autocomplete="off" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="new-password" name="password" autocomplete="new-password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="admin_name">ФИО</label>
+                <input type="text" id="admin_name" name="admin_name" autocomplete="off" required>
+            </div>
+
+            <button type="submit">Добавить администратора</button>
+            </form>
+        </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const loginInput = document.getElementById('login');
+    const passwordInput = document.getElementById('new-password');
+    const nameInput = document.getElementById('admin_name');
+    const form = document.getElementById('adminAddForm');
+
+    // Валидация: не менее 6 символов
+    function validateInput(input, minLength = 6) {
+      input.addEventListener('input', function () {
+        if (this.value.trim().length < minLength) {
+          this.setCustomValidity(`Минимум ${minLength} символов`);
+        } else {
+          this.setCustomValidity('');
+        }
+      });
+    }
+
+    validateInput(loginInput, 6);
+    validateInput(passwordInput, 6);
+    validateInput(nameInput, 6);
+
+    form.addEventListener('submit', function (e) {
+      if (!loginInput.checkValidity() || !passwordInput.checkValidity() || !nameInput.checkValidity()) {
+        e.preventDefault();
+      }
+    });
+  });
+</script>

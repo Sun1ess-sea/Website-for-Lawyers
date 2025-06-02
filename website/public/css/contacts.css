@@ -1,0 +1,408 @@
+/* ====== ОБЩИЙ КОНТЕЙНЕР СТРАНИЦЫ ====== */
+.booking {
+    background-color: #f9f9f9;
+    padding: 60px;
+}
+
+.contacts-page {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 40px 20px;
+    width: 70%;
+    max-width: none;
+    margin: 0 auto;
+    padding-top: 100px;
+}
+
+/* ====== ЗАГОЛОВОК ====== */
+.contacts-header {
+    text-align: center;
+}
+
+.contacts-header h1 {
+    display: inline-block;
+    font-size: 35px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #c5a233;
+}
+
+/* ====== КОНТЕНТ: КОНТАКТЫ + ФОРМА ====== */
+.contacts-content {
+    display: flex;
+    flex-direction: row;
+    gap: 60px;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+/* ====== ЛЕВАЯ КОЛОНКА: КОНТАКТЫ ====== */
+.contacts-info {
+    flex: 2;
+    border-right: 1px solid #d4af37;
+    padding-right: 40px;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-item {
+    display: flex;
+    align-items: flex-start;
+    border-bottom: 1px solid #d4af37;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.contact-item:last-child {
+    border-bottom: none;
+}
+
+.contact-label {
+    font-weight: bold;
+    min-width: 110px;
+    white-space: nowrap;
+    font-size: 20px;
+    font-family: "Playfair Display";
+    color: black;
+}
+
+.contact-value {
+    flex: 1;
+    font-family: "Monserrat";
+    font-weight: bold;
+    color: rgb(95, 95, 95);
+}
+
+.contact-title {
+    font-weight: bold;
+    font-size: 20px;
+    border-bottom: 1px solid #d4af37;
+    padding-bottom: 15px;
+    font-family: "Playfair Display";
+    color: black;
+}
+
+/* ====== ПРАВАЯ КОЛОНКА: ФОРМА ====== */
+.contacts-form {
+    flex: 1;
+}
+
+/* ====== ФОРМА ====== */
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#calendar {
+    font-family: "Monserrat";
+    font-size: 18px;
+}
+
+.contacts-page select, input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    font-family: "Vollkorn";
+    font-size: 18px;
+}
+
+.contacts-page select:focus, input:focus {
+    border: 1px solid #d4af37;
+}
+
+.contacts-page select::placeholder, input::placeholder, textarea::placeholder {
+    color: #ccc;
+}
+
+.contacts-page button[type="submit"] {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #d4af37;
+    color: white;
+    border: #8a7328;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contacts-page button[type="submit"]:hover {
+    background-color: #8a7328;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+    border: #d4af37
+}
+
+.contacts-page button[type="submit"]:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* ====== КНОПКИ ВЫБОРА ВРЕМЕНИ ====== */
+.time-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.time-button {
+    padding: 10px 15px;
+    background-color: white;
+    border: 1px solid #d4af37;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: "Moserrat";
+    font-size: 18px;
+}
+
+.time-button:hover {
+    background-color: #d4af37;
+    color: white;
+    border: 1px solid #8a7328;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.time-button.selected {
+    background-color: #d4af37;
+    color: white;
+    border-color: #d4af37;
+}
+
+.time-button:disabled {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+}
+
+/* ====== КАЛЕНДАРЬ ====== */
+.calendar-section {
+    flex: 1;
+    min-width: 280px;
+}
+
+.contacts-page select option {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #c5a233;
+    border-radius: 5px;
+    outline: none;
+    font-family: "Vollkorn";
+    font-size: 18px;
+}
+
+.contacts-page select option:hover {
+  background-color: #d4af37;
+  color:white
+}
+
+.selected-info {
+    font-family: "Monserrat";
+    font-size: 18px;
+}
+
+.disabled-slot {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #ccc !important;
+  color: #555 !important;
+  cursor: not-allowed !important;
+  border: 1px solid #555;
+}
+
+.disabled-slot:hover {
+  border: 1px solid #555;
+}
+
+/* Общие стили для чекбоксов */
+.checkbox-group {
+  display: flex;
+  align-items: flex-start;
+  max-width: 100%;
+  position: relative;
+}
+
+.checkbox-group .booking-checkbox {
+  margin-top: 4px;
+  flex-shrink: 0;
+  width: auto !important;       
+  display: inline-block;
+  margin-right: 8px !important;
+  padding: 8px !important;
+}
+
+.checkbox-group label {
+  line-height: 1.4;
+  word-break: break-word;
+  flex: 1;
+  font-family: 'Monserrat';
+  font-size: 18px;
+}
+
+.checkbox-group label a {
+  color: #d4af37;
+  text-decoration: none;
+}
+
+.checkbox-group label a:hover {
+  text-decoration: underline;
+}
+
+/* Стили для фокуса чекбокса*/
+.checkbox-group .booking-checkbox:focus {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 3px solid #d4af37 !important;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+  outline: none;
+}
+
+/* Стили для чекнутого чекбокса*/
+.checkbox-group .booking-checkbox:checked {
+  background-color: #d4af37 !important;
+  color: #fff !important;
+  border: 3px solid #d4af37 !important;
+}
+
+
+
+/* ====== ИКОНКА ПОДСКАЗКИ ====== */
+.info-icon {
+    display: inline-block;
+    margin-left: 8px;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 50%;
+    background-color: #d4af37;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: help;
+    position: relative;
+}
+
+.info-icon::after {
+    content: "Здесь вы можете записаться на консультацию. Начните с выбора специализации адвоката, исходя из вашей ситуации. Если вы не уверены, к кому обратиться — свяжитесь с нами.";
+    position: absolute;
+    width: 280px;
+    background-color: #fff;
+    color: #696154;
+    border: 1px solid #d4af37;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    top: 25px;
+    left: 0;
+    z-index: 10;
+    display: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.info-icon:hover::after {
+    display: block;
+}
+
+
+/* ====== АДАПТИВНОСТЬ ====== */
+@media (max-width: 768px) {
+    .contacts-content {
+        flex-direction: column;
+    }
+
+    .contacts-info {
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+        padding-right: 0;
+        padding-bottom: 30px;
+        margin-bottom: 30px;
+    }
+
+    .contacts-form {
+        padding-left: 0;
+    }
+
+    .contacts-header h1 {
+        font-size: 24px;
+    }
+
+    .info-icon::after {
+        width: 90vw;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .contact-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .contact-label {
+        min-width: unset;
+    }
+
+    .contact-value {
+        margin-top: 4px;
+    }
+}
+
+
+/* ====== СЕКЦИЯ КАРТЫ ====== */
+.map {
+    padding: 100px;
+    background-color: #e1ac0018;
+}
+
+.map-content {
+    display: flex;
+    gap: 60px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.map-text {
+    flex: 1;
+    min-width: 280px;
+}
+
+.map-text h2 {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333333;
+    border-bottom: 1px solid #d4af37;
+    padding-bottom: 20px;
+}
+
+.map-text p {
+    font-size: 20px;
+    line-height: 1.6;
+    color: #555555;
+}
+
+.map-embed {
+    flex: 2;
+    min-width: 300px;
+}
+
+@media (max-width: 768px) {
+    .map-content {
+        flex-direction: column;
+    }
+
+    .map-embed {
+        width: 100%;
+    }
+}

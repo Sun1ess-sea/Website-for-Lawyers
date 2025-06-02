@@ -1,0 +1,78 @@
+.admin-content-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  max-width: 400px;
+  margin-top: 2rem auto;
+}
+
+.admin-content-btn {
+  display: block;
+  text-align: center;
+  padding: 1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s;
+  border: 3px solid;
+}
+
+/* Отзывы — зелёная */
+.admin-content-btn.reviews-btn {
+  color: #27ae60;
+  border-color: #27ae60;
+  background-color: white;
+}
+.admin-content-btn.reviews-btn:hover {
+  background-color: #1e8449;
+  color: white;
+  border-color: #1e8449;
+}
+
+/* Услуги — фиолетовая */
+.admin-content-btn.services-btn {
+  color: #8e44ad;
+  border-color: #8e44ad;
+  background-color: white;
+}
+.admin-content-btn.services-btn:hover {
+  background-color: #6c3483;
+  color: white;
+  border-color: #6c3483;
+}
+
+/* Сотрудники — красная */
+.admin-content-btn.lawyers-btn {
+  color: #e74c3c;
+  border-color: #e74c3c;
+  background-color: white;
+}
+.admin-content-btn.lawyers-btn:hover {
+  background-color: #c0392b;
+  color: white;
+  border-color: #c0392b;
+}
+
+/* Новости — синяя */
+.admin-content-btn.news-btn {
+  color: #3498db;
+  border-color: #3498db;
+  background-color: white;
+}
+.admin-content-btn.news-btn:hover {
+  background-color: #2e86c1;
+  color: white;
+  border-color: #2e86c1;
+}
+
+/* Вернуться */
+.admin-content-btn.back {
+  grid-column: span 2;
+  background-color: #d4af37;
+  color: white;
+  border: none;
+}
+
+.admin-content-btn.back:hover {
+  background-color: #8a7328;
+}

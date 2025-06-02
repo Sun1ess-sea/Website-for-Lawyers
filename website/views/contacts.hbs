@@ -1,0 +1,116 @@
+<section class="booking">
+  <div class="contacts-page">
+    <div class="contacts-header">
+      <h1>Записаться на консультацию</h1>
+    </div>
+
+    <div class="contacts-content">
+      <div class="contacts-info">
+        <div class="contact-item contact-title">
+          Коллегия адвокатов "Перспектива"
+        </div>
+
+        <div class="contact-item">
+          <span class="contact-label">Телефон</span>
+          <span class="contact-value">+7 (922) 697-01-97</span>
+        </div>
+
+        <div class="contact-item">
+          <span class="contact-label">Адрес</span>
+          <span class="contact-value">г. Челябинск, ул. Труда, д. 156 «В»</span>
+        </div>
+
+        <div class="contact-item">
+          <span class="contact-label">Email</span>
+          <span class="contact-value">law@law.com</span>
+        </div>
+
+        <div class="contact-item">
+          <span class="contact-label">Время<br>работы</span>
+          <span class="contact-value">
+            Пн–Пт: 10:00–18:00<br>
+            Сб-Вс: Выходные
+          </span>
+        </div>
+      </div>
+
+
+      <div class="contacts-form">
+        <form id="booking-form">
+          <div class="form-group">
+            <label for="specialization" class="contact-label">
+              Специализация
+              <span class="info-icon" title="?">?</span>
+            </label>
+            <select id="specialization" required>
+              <option value="">Выберите специализацию</option>
+              {{#each legalSpecializations}}
+                <option value="{{this.ls_id}}">{{this.specialization_name}}</option>
+              {{/each}}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="lawyer" class="contact-label">Адвокат</label>
+            <select id="lawyer" disabled required>
+              <option value="">Выберите специализацию</option>
+            </select>
+          </div>
+
+          <div class="form-group calendar-section">
+            <label for="calendar" class="contact-label">Дата</label>
+            <input type="text" id="calendar" disabled required>
+          </div>
+
+          <div class="form-group">
+            <div id="time-slots" class="time-buttons"></div>
+          </div>
+
+          <div id="selected-info" class="mb-3 selected-info"></div>
+
+          <div id="client-info" class="form-group" style="display:none;">
+            <div class="form-group">
+              <label for="client_email" class="contact-label">Email</label>
+              <input type="email" id="client_email" placeholder="Ваш Email" required>
+            </div>
+
+            <div class="form-group">
+              <label for="client_phone" class="contact-label">Телефон</label>
+              <input type="tel" id="client_phone" placeholder="Телефон" required>
+            </div>
+
+            <div class="form-group">
+              <label for="client_name" class="contact-label">Имя</label>
+              <input type="text" id="client_name" placeholder="Имя" required>
+            </div>
+
+            <div class="checkbox-group mb-3">
+                <input class="booking-checkbox" type="checkbox" id="privacy_policy" name="privacy_policy" required>
+                <label for="privacy_policy">
+                    Я соглашаюсь с <a href="/docs/personal-data-consent.docx" target="_blank" download>обработкой персональных данных</a> и <a href="/docs/privacy-policy.docx" target="_blank" download>политикой конфиденциальности</a>
+                </label>
+            </div>
+
+            <button type="submit" id="book-btn">Записаться</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="map">
+  <div class="map-content">
+    <div class="map-text">
+      <h2>Как добраться</h2>
+      <p>
+        Ближайшая остановка общественного транспорта — «Многофункциональный центр». От неё следует двигаться по тротуару вдоль фасада здания в сторону торгового центра "Западный луч". Нужен первый проход после главного входа в ТЦ. Проход во двор, где располагается офис, осуществляется через калитку с домофоном. Офис расположен в цокольном помещении дома 156 «В». Для автомобилистов предусмотрена просторная парковка прямо перед въездом во двор.
+      </p>
+    </div>
+    <div class="map-embed">
+      <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A5339f31bae2d87ecee54a3cee24f1d0b0e34fa8c320ae5ab1bc3b721d4c3f4cd&amp;source=constructor"
+          width="100%" height="400" frameborder="0"></iframe>
+      </iframe>
+    </div>
+  </div>
+</section>

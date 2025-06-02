@@ -1,0 +1,49 @@
+<section class="admin-reviews">
+  <div class="container py-5">
+    <h2 class="admin-title">Управление отзывами</h2>
+
+    <!-- Форма добавления отзыва -->
+    <form action="/admin/add-review" method="POST" enctype="multipart/form-data" class="news-form">
+      <div class="form-group">
+        <label for="photo">Фотография:</label>
+        <input type="file" name="photo" id="photo" required>
+      </div>
+      <div class="form-group">
+        <label for="title">Заголовок:</label>
+        <input type="text" name="title" id="title" placeholder="Название компании/имя клиента" required>
+      </div>
+      <div class="form-group">
+        <label for="description">Описание:</label>
+        <textarea name="description" id="description" rows="4" placeholder="Описание отзыва..." required></textarea>
+      </div>
+      <button type="submit" class="create-btn d-block mx-auto">Добавить отзыв</button>
+    </form>
+
+    <!-- Таблица отзывов -->
+    <h2 class="admin-title mt-5">Существующие отзывы</h2>
+    <table class="news-table">
+      <thead>
+        <tr>
+          <th>Фото</th>
+          <th>Заголовок</th>
+          <th>Описание</th>
+          <th>Действие</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each reviews}}
+          <tr>
+            <td><small>{{this.image_review}}</small></td>
+            <td>{{this.title_review}}</td>
+            <td>{{this.description_review}}</td>
+            <td>
+              <form action="/admin/delete-review/{{this.review_id}}" method="POST">
+                <button type="submit" class="delete-btn">Удалить</button>
+              </form>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</section>

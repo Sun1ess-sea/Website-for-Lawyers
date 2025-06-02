@@ -1,0 +1,27 @@
+<section class="lawyers-page">
+  <div class="container py-5">
+    <h1 class="text-center mb-5">Наши специалисты</h1>
+    <div class="row g-4">
+      {{#each lawyers}}
+        <div class="col-md-6">
+          <a href="/lawyers/{{this.lawyer_id}}" class="lawyer-card-link text-decoration-none d-block">
+            <div class="lawyer-card d-flex p-3">
+              <img src="{{this.lawyer_image}}" alt="{{this.lawyer_name}}" class="lawyer-photo me-3">
+              <div class="d-flex flex-column justify-content-between w-100">
+                <div>
+                  <h4>{{this.lawyer_name}}</h4>
+                  <p class="lawyer-title-text">{{this.lawyer_title}}</p>
+                </div>
+                <div class="lawyer-specializations mt-3">
+                  {{#each this.specializations}}
+                    <span class="specialization-pill">{{this}}</span>
+                  {{/each}}
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+</section>
