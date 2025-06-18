@@ -4,7 +4,6 @@ const adminController = require('../controllers/adminController');
 const { isAuthenticated } = require('../middleware/authMiddleware');
 const { uploadNewsPhoto, uploadReviewPhotos, uploadLawyerPhotos } = require('../middleware/multer');
 
-
 const setIsAdminPage = (req, res, next) => {
   res.locals.isAdminPage = true;
   next();
@@ -16,9 +15,6 @@ router.get('/login', adminController.renderLoginPage);
 router.post('/login', adminController.loginAdmin);
 router.get('/admin-panel', isAuthenticated, adminController.profile);
 router.get('/logout', adminController.logoutAdmin);
-
-router.get('/add-admin', isAuthenticated, adminController.showAddAdminPage);
-router.post('/add-admin', isAuthenticated, adminController.addAdmin);
 
 router.get('/moderating-bookings', isAuthenticated, adminController.getBookings);
 router.post('/bookings/delete/:booking_id', isAuthenticated, adminController.deleteBooking);
@@ -43,13 +39,19 @@ router.post('/delete-service/:service_id', isAuthenticated, adminController.dele
 router.get('/admin-news', isAuthenticated, adminController.showNewsPage);
 router.post('/add-news', isAuthenticated, uploadNewsPhoto.single('photo'), adminController.postAddNews);
 router.post('/delete-news/:news_id', isAuthenticated, adminController.postDeleteNews);
+router.get('/admin-news/edit/:news_id', isAuthenticated, adminController.showEditNewsPage);
+router.post('/update-news/:news_id', isAuthenticated, uploadNewsPhoto.single('photo'), adminController.updateNews);
 
 router.get('/admin-reviews', isAuthenticated, adminController.showAdminReviews);
 router.post('/add-review', isAuthenticated, uploadReviewPhotos.single('photo'), adminController.addReview);
 router.post('/delete-review/:review_id', isAuthenticated, adminController.postDeleteReview);
+router.get('/admin-reviews/edit/:review_id', isAuthenticated, adminController.showEditReviewPage);
+router.post('/update-review/:review_id', isAuthenticated, uploadReviewPhotos.single('photo'), adminController.updateReview);
 
 router.get('/admin-lawyers', isAuthenticated, adminController.showAdminLawyers);
 router.post('/add-lawyer', isAuthenticated, uploadLawyerPhotos.single('lawyer_image'), adminController.addLawyer);
 router.post('/delete-lawyer/:lawyer_id', adminController.deleteLawyer);
+router.get('/admin-lawyers/edit/:lawyer_id', isAuthenticated, adminController.showEditLawyerPage);
+router.post('/update-lawyer/:lawyer_id', isAuthenticated, uploadLawyerPhotos.single('lawyer_image'), adminController.updateLawyer);
 
 module.exports = router;

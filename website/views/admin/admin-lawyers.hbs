@@ -3,7 +3,7 @@
         <div class="container">
             <h2 class="admin-title">Добавить адвоката</h2>
 
-            <form action="/admin/add-lawyer" method="POST" enctype="multipart/form-data" class="news-form">
+            <form action="{{#if editLawyer}}/admin/update-lawyer/{{editLawyer.lawyer_id}}{{else}}/admin/add-lawyer{{/if}}"  method="POST" enctype="multipart/form-data" class="news-form"> 
             <div class="form-group">
                 <label for="lawyer_image">Фотография:</label>
                 <input type="file" name="lawyer_image" id="lawyer_image" class="photo-input" required>
@@ -11,27 +11,35 @@
 
             <div class="form-group">
                 <label for="lawyer_name">Имя:</label>
-                <input type="text" name="lawyer_name" id="lawyer_name" placeholder="Имя адвоката" required>
+                <input type="text" name="lawyer_name" id="lawyer_name" placeholder="Имя адвоката"
+                value="{{#if editLawyer}}{{editLawyer.lawyer_name}}{{/if}}"
+                required>
             </div>
 
             <div class="form-group">
                 <label for="lawyer_title">Краткое описание:</label>
-                <input type="text" name="lawyer_title" id="lawyer_title" placeholder="Краткий заголовок о специалисте" required>
+                <input type="text" name="lawyer_title" id="lawyer_title" placeholder="Краткий заголовок о специалисте"
+                value="{{#if editLawyer}}{{editLawyer.lawyer_title}}{{/if}}"
+                required>
             </div>
 
             <div class="form-group">
                 <label for="lawyer_description">Описание:</label>
-                <textarea name="lawyer_description" id="lawyer_description" rows="4" placeholder="Описание адвоката..." required></textarea>
+                <textarea name="lawyer_description" id="lawyer_description" rows="4" placeholder="Описание адвоката..." required
+                >{{#if editLawyer}}{{editLawyer.lawyer_description}}{{/if}}</textarea>
             </div>
 
             <div class="form-group">
                 <label for="lawyer_experience">Опыт:</label>
-                <textarea name="lawyer_experience" id="lawyer_experience" rows="4" placeholder="Опыт специалиста" required></textarea>
+                <textarea name="lawyer_experience" id="lawyer_experience" rows="4" placeholder="Опыт специалиста" required
+                >{{#if editLawyer}}{{editLawyer.lawyer_experience}}{{/if}}</textarea>
             </div>
 
             <div class="form-group">
                 <label for="lawyer_email">Почта:</label>
-                <input type="email" name="lawyer_email" id="lawyer_email" placeholder="Электронная почта" required>
+                <input type="email" name="lawyer_email" id="lawyer_email" placeholder="Электронная почта"
+                value="{{#if editLawyer}}{{editLawyer.lawyer_email}}{{/if}}"
+                required>
             </div>
 
             <div class="form-group">
@@ -50,7 +58,13 @@
                 <div class="error-message" style="color: red;">{{errorMessage}}</div>
             {{/if}}
 
-            <button type="submit" class="create-btn d-block mx-auto">Добавить адвоката</button>
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <button type="submit" class="create-btn">
+                    {{#if editLawyer}}Редактировать адвоката{{else}}Добавить адвоката{{/if}}
+                </button>
+                <a href="/admin/content" class="btn btn-primary">Вернуться назад</a>
+            </div>
+
             </form>
 
 
@@ -64,7 +78,8 @@
                     <th>Описание</th>
                     <th>Почта</th>
                     <th>Специализации</th>
-                    <th>Действия</th>
+                    <th>Изменить</th>
+                    <th>Удалить</th>
                 </tr>
             </thead>
             <tbody>
@@ -76,6 +91,11 @@
                     <td class="short-description">{{this.lawyer_description}}</td>
                     <td class="narrow-col">{{this.lawyer_email}}</td>
                     <td>{{this.specializations}}</td>
+                    <td>
+                    <form action="/admin/admin-lawyers/edit/{{this.lawyer_id}}" method="GET">
+                        <button type="submit" class="edit-btn">Изменить</button>
+                    </form>
+                    </td>
                     <td>
                     <form action="/admin/delete-lawyer/{{this.lawyer_id}}" method="POST">
                         <button type="submit" class="delete-btn">Удалить</button>

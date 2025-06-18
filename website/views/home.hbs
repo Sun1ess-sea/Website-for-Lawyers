@@ -257,25 +257,25 @@
         <h2>Отправьте нам ваш вопрос и мы ответим</h2>
         <p class="mb-2">Наш специалист свяжется с вами в ближайшее время.</p>
         <form action="/submit" method="post">
-        <div class="mb-3">
-            <input type="email" pattern="[a-zA-Z0-9._%+-]{2,}+@[a-zA-Z0-9.-]{2,}+\.[a-zA-Z]{2,4}" inputmode="email" class="form-control" name="req_email" placeholder="Ваш Email name@example.com" required>
-        </div>
-        <div class="mb-3">
-            <input pattern="8[0-9]{10}" inputmode="numeric" maxlength="11" class="form-control" name="req_phone" placeholder="Ваш номер телефона 8 (***) ***-**-**" required>
-        </div>
-        <div class="mb-3">
-            <input pattern="[а-яА-Яa-zA-Z\s]{2,}" inputmode="text" class="form-control" name="req_name" placeholder="Ваше полное ФИО" required>
-        </div>
-        <div class="mb-3">
-            <textarea class="form-control" name="req_message" rows="5" placeholder="Опишите свою проблему" style="resize: vertical;" required></textarea>
-        </div>
-        <div class="form-check mb-3 text-start">
-            <input type="checkbox" class="form-check-input" name="privacy_policy" id="privacy_policy" required>
-            <label class="form-check-label" for="privacy_policy">
-                Подтвердите, что согласны на <a href="/docs/personal-data-consent.docx" target="_blank" download>обработку персональных данных</a>
-            </label>
-        </div>
-        <button type="submit" class="btn btn-primary send-btn w-100 mb-3">Отправить!</button>
+          <div class="mb-3">
+              <input type="email" pattern="[a-zA-Z0-9._%+-]{2,}+@[a-zA-Z0-9.-]{2,}+\.[a-zA-Z]{2,4}" inputmode="email" class="form-control" name="req_email" placeholder="Ваш Email name@example.com" required>
+          </div>
+          <div class="mb-3">
+              <input pattern="8[0-9]{10}" inputmode="numeric" maxlength="11" class="form-control" name="req_phone" placeholder="Ваш номер телефона 8 (***) ***-**-**" required>
+          </div>
+          <div class="mb-3">
+              <input pattern="[а-яА-Яa-zA-Z\s]{2,}" inputmode="text" class="form-control" name="req_name" placeholder="Ваше полное ФИО" required>
+          </div>
+          <div class="mb-3">
+              <textarea class="form-control" name="req_message" rows="5" placeholder="Опишите свою проблему" style="resize: vertical;" required></textarea>
+          </div>
+          <div class="form-check mb-3 text-start">
+              <input type="checkbox" class="form-check-input" name="privacy_policy" id="privacy_policy" required>
+              <label class="form-check-label" for="privacy_policy">
+                  Подтвердите, что согласны на <a href="/docs/personal-data-consent.docx" target="_blank" download>обработку персональных данных</a>
+              </label>
+          </div>
+          <button type="submit" class="btn btn-primary send-btn w-100 mb-3">Отправить!</button>
         </form>
         <label class="form-check-label mb-0" for="privacy_policy">
                 Убедитесь, что ознакомились с <a href="/docs/privacy-policy.docx" target="_blank" download>политикой конфиденциальности</a>!
@@ -283,3 +283,232 @@
     </div>
 </div>
 </section>
+
+
+
+<script>
+ document.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector('.consult-section form');
+  const emailInput = form.querySelector('input[name="req_email"]');
+  const phoneInput = form.querySelector('input[name="req_phone"]');
+  const nameInput = form.querySelector('input[name="req_name"]');
+  const messageInput = form.querySelector('textarea[name="req_message"]');
+  const privacyCheckbox = form.querySelector('input[name="privacy_policy"]');
+  const submitButton = form.querySelector('button[type="submit"]');
+  
+  const hints = {
+    email: "",
+    phone: "",
+    name: "",
+    message: "",
+    privacy: ""
+  };
+
+  function createHintElement(input, hintText) {
+    const hintElement = document.createElement('div');
+    hintElement.className = 'form-hint text-white mt-1 small';
+    hintElement.textContent = hintText;
+    input.parentNode.insertBefore(hintElement, input.nextSibling);
+    return hintElement;
+  }
+
+  const emailHint = createHintElement(emailInput, hints.email);
+  const phoneHint = createHintElement(phoneInput, hints.phone);
+  const nameHint = createHintElement(nameInput, hints.name);
+  const messageHint = createHintElement(messageInput, hints.message);
+  const privacyHint = createHintElement(privacyCheckbox, hints.privacy);
+
+  function manageHintVisibility(input, hintElement) {
+    if (input.value.trim() === '' && input !== document.activeElement) {
+      hintElement.style.display = 'none';
+    } else {
+      hintElement.style.display = 'block';
+    }
+  }
+
+  // Валидация email
+  function validateEmail() {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (emailInput.value.trim() === '') {
+      emailInput.classList.remove('is-invalid');
+      emailHint.classList.remove('text-warning');
+      emailHint.classList.add('text-white');
+      emailHint.textContent = hints.email;
+    } else if (!emailRegex.test(emailInput.value)) {
+      emailInput.classList.add('is-invalid');
+      emailHint.classList.remove('text-white');
+      emailHint.classList.add('text-warning');
+      emailHint.textContent = "Некорректный email. Пример: name@example.com";
+    } else {
+      emailInput.classList.remove('is-invalid');
+      emailHint.classList.remove('text-warning');
+      emailHint.classList.add('text-white');
+      emailHint.textContent = hints.email;
+    }
+    manageHintVisibility(emailInput, emailHint);
+    updateSubmitButton();
+  }
+
+  // Валидация телефона
+  function validatePhone() {
+    let val = phoneInput.value.replace(/\D/g, '');
+    val = val.replace(/^[^8]/, '');
+    if (val.length > 11) val = val.slice(0, 11);
+    phoneInput.value = val;
+    
+    if (phoneInput.value.trim() === '') {
+      phoneInput.classList.remove('is-invalid');
+      phoneHint.classList.remove('text-warning');
+      phoneHint.classList.add('text-white');
+      phoneHint.textContent = hints.phone;
+    } else if (val.length !== 11 || !val.startsWith('8')) {
+      phoneInput.classList.add('is-invalid');
+      phoneHint.classList.remove('text-white');
+      phoneHint.classList.add('text-warning');
+      phoneHint.textContent = "Номер должен начинаться с 8 и содержать 11 цифр";
+    } else {
+      phoneInput.classList.remove('is-invalid');
+      phoneHint.classList.remove('text-warning');
+      phoneHint.classList.add('text-white');
+      phoneHint.textContent = hints.phone;
+    }
+    manageHintVisibility(phoneInput, phoneHint);
+    updateSubmitButton();
+  }
+
+  // Валидация имени
+  function validateName() {
+    const nameRegex = /^[а-яА-Яa-zA-Z\s]{2,}$/;
+    if (nameInput.value.trim() === '') {
+      nameInput.classList.remove('is-invalid');
+      nameHint.classList.remove('text-warning');
+      nameHint.classList.add('text-white');
+      nameHint.textContent = hints.name;
+    } else if (!nameRegex.test(nameInput.value)) {
+      nameInput.classList.add('is-invalid');
+      nameHint.classList.remove('text-white');
+      nameHint.classList.add('text-warning');
+      nameHint.textContent = "Имя должно содержать только буквы и пробелы (минимум 2 символа)";
+    } else {
+      nameInput.classList.remove('is-invalid');
+      nameHint.classList.remove('text-warning');
+      nameHint.classList.add('text-white');
+      nameHint.textContent = hints.name;
+    }
+    manageHintVisibility(nameInput, nameHint);
+    updateSubmitButton();
+  }
+
+  // Валидация сообщения
+  function validateMessage() {
+    if (messageInput.value.trim() === '') {
+      messageInput.classList.remove('is-invalid');
+      messageHint.classList.remove('text-warning');
+      messageHint.classList.add('text-white');
+      messageHint.textContent = hints.message;
+    } else if (messageInput.value.trim().length < 10) {
+      messageInput.classList.add('is-invalid');
+      messageHint.classList.remove('text-white');
+      messageHint.classList.add('text-warning');
+      messageHint.textContent = "Слишком короткое описание (минимум 10 символов)";
+    } else {
+      messageInput.classList.remove('is-invalid');
+      messageHint.classList.remove('text-warning');
+      messageHint.classList.add('text-white');
+      messageHint.textContent = hints.message;
+    }
+    manageHintVisibility(messageInput, messageHint);
+    updateSubmitButton();
+  }
+
+  // Валидация чекбокса
+  function validatePrivacy() {
+    if (!privacyCheckbox.checked) {
+      privacyHint.classList.remove('text-white');
+      privacyHint.classList.add('text-warning');
+    } else {
+      privacyHint.classList.remove('text-warning');
+      privacyHint.classList.add('text-white');
+      privacyHint.textContent = hints.privacy;
+    }
+    updateSubmitButton();
+  }
+
+  // Обработчики событий
+  emailInput.addEventListener('input', validateEmail);
+  emailInput.addEventListener('blur', validateEmail);
+  emailInput.addEventListener('focus', function() {
+    emailHint.style.display = 'block';
+  });
+
+  phoneInput.addEventListener('input', validatePhone);
+  phoneInput.addEventListener('blur', validatePhone);
+  phoneInput.addEventListener('focus', function() {
+    phoneHint.style.display = 'block';
+  });
+
+  nameInput.addEventListener('input', validateName);
+  nameInput.addEventListener('blur', validateName);
+  nameInput.addEventListener('focus', function() {
+    nameHint.style.display = 'block';
+  });
+
+  messageInput.addEventListener('input', validateMessage);
+  messageInput.addEventListener('blur', validateMessage);
+  messageInput.addEventListener('focus', function() {
+    messageHint.style.display = 'block';
+  });
+
+  privacyCheckbox.addEventListener('change', validatePrivacy);
+
+  // Проверка всей формы
+  function isFormValid() {
+    const emailValid = !emailInput.classList.contains('is-invalid') && emailInput.value;
+    const phoneValid = !phoneInput.classList.contains('is-invalid') && phoneInput.value.length === 11;
+    const nameValid = !nameInput.classList.contains('is-invalid') && nameInput.value;
+    const messageValid = !messageInput.classList.contains('is-invalid') && messageInput.value.trim().length >= 10;
+    const privacyValid = privacyCheckbox.checked;
+    
+    return emailValid && phoneValid && nameValid && messageValid && privacyValid;
+  }
+
+  // Обновление состояния кнопки отправки
+  function updateSubmitButton() {
+    submitButton.disabled = !isFormValid();
+  }
+
+  // Блокировка кнопки при загрузке
+  submitButton.disabled = true;
+
+  const style = document.createElement('style');
+  style.textContent = `
+    .is-invalid {
+      border-color: #dc3545 !important;
+    }
+    .form-hint {
+      font-size: 0.8rem;
+      transition: all 0.3s;
+    }
+
+    button[type="submit"]:disabled {
+      background-color: rgb(212, 175, 55) !important;
+      border-color: rgb(212, 175, 55) !important;
+      cursor: not-allowed;
+      opacity: 1;
+    }
+    .text-warning {
+      color: #ffc107 !important;
+    }
+    .text-white {
+      color: #fff !important;
+    }
+  `;
+  document.head.appendChild(style);
+
+  manageHintVisibility(emailInput, emailHint);
+  manageHintVisibility(phoneInput, phoneHint);
+  manageHintVisibility(nameInput, nameHint);
+  manageHintVisibility(messageInput, messageHint);
+});
+</script>
+

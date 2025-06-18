@@ -83,3 +83,32 @@
     border: 1px solid #ccc;
 }
 
+
+/*ТЕСТИРУЕМ*/
+
+.admin-reviews th:nth-child(1), 
+.admin-reviews td:nth-child(1) {
+    width: 120px; /* Фото - уменьшено */
+    padding: 8px 12px;
+}
+
+.admin-reviews th:nth-child(2), 
+.admin-reviews td:nth-child(2) {
+    width: 180px; /* Заголовок - уменьшено */
+    padding: 8px 12px;
+}
+
+.admin-reviews th:nth-child(3), 
+.admin-reviews td:nth-child(3) {
+    width: auto; /* Описание - займет всё свободное место */
+    padding: 8px 12px;
+}
+
+
+.admin-reviews th:nth-child(4),
+.admin-reviews td:nth-child(4),
+.admin-reviews th:nth-child(5),
+.admin-reviews td:nth-child(5) {
+    width: 100px; /* Кнопки */
+    padding: 8px 12px;
+}

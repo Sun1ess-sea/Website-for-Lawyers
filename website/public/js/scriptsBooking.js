@@ -58,6 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const futureDates = availableDates.filter(date => date >= today);
   
         flatpickr("#calendar", {
+          locale: "ru",
+          firstDayOfWeek: 1,
           enable: futureDates,
           dateFormat: "Y-m-d",
           onChange: function (selectedDates, dateStr) {

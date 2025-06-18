@@ -47,6 +47,7 @@
           </div>
         </div>
         <div class="position-relative w-100">
+          <a href="/admin/admin-panel" class="btn btn-primary position-absolute start-0" style="left:0;">Вернуться назад</a>
           <div class="d-flex justify-content-center">
             <button type="submit">Создать расписание</button>
           </div>
@@ -64,7 +65,7 @@
         <label for="lawyerFilter">Адвокат:</label>
         <select id="lawyerFilter">
           <option value="">Все</option>
-          <!-- Здесь динамически добавятся адвокаты -->
+          <!-- адвокаты -->
         </select>
 
         <label for="dateFrom">Дата от:</label>
@@ -87,7 +88,7 @@
           </tr>
         </thead>
         <tbody id="scheduleTableBody">
-          <!-- Расписания сюда -->
+          <!-- Расписания -->
         </tbody>
       </table>
     </div>
@@ -96,12 +97,10 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
-  // --- Твой существующий код ---
 
   const specSelect = document.getElementById('specialization');
   const lawyerSelect = document.getElementById('lawyer');
 
-  // Получаем специализации
   const specRes = await fetch('/admin/specializations');
   const specs = await specRes.json();
 
@@ -112,7 +111,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     specSelect.appendChild(option);
   });
 
-  // Слушаем выбор специализации
   specSelect.addEventListener('change', async () => {
     const ls_id = specSelect.value;
 
@@ -201,7 +199,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // === Опциональная кнопка сброса формы ===
+  // === Кнопка сброса формы ===
   const resetBtn = document.getElementById("resetForm");
   if (resetBtn) {
     resetBtn.addEventListener("click", () => {

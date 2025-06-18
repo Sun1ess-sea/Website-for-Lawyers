@@ -2,59 +2,58 @@ const db = require('../database/dbRequests');
 const pool = require('../database/db');
 const nodemailer = require("nodemailer");
 
-async function createTestTransport() {
-  const testAccount = await nodemailer.createTestAccount();
-
-  const transporter = nodemailer.createTransport({
-    host: testAccount.smtp.host,
-    port: testAccount.smtp.port,
-    secure: testAccount.smtp.secure,
+async function createTransporter() {
+  return nodemailer.createTransport({
+    host: 'smtp.yandex.com',
+    port: 465,
+    secure: true,
     auth: {
-      user: testAccount.user,
-      pass: testAccount.pass,
+      user: process.env.YANDEX_USER,
+      pass: process.env.YANDEX_PASS,
     },
   });
-
-  return { transporter, testAccount };
 }
 
 async function sendBookingEmail(schedule_id, client_email, client_name, client_phone) {
-  // Получаем данные расписания и адвоката
-  const scheduleResult = await pool.query(`
-    SELECT 
-      s.booking_date, 
-      l.lawyer_name
-    FROM schedule s
-    JOIN lawyers l ON s.lawyer_id = l.lawyer_id
-    WHERE s.schedule_id = $1
-  `, [schedule_id]);
+  try {
+    const scheduleResult = await pool.query(`
+      SELECT 
+        s.booking_date, 
+        l.lawyer_name
+      FROM schedule s
+      JOIN lawyers l ON s.lawyer_id = l.lawyer_id
+      WHERE s.schedule_id = $1
+    `, [schedule_id]);
 
-  const schedule = scheduleResult.rows[0];
+    const schedule = scheduleResult.rows[0];
 
-  // Формируем HTML письмо
-  const htmlContent = `
-    <h3>Вы записались на консультацию</h3>
-    <p><strong>Клиент:</strong> ${client_name}</p>
-    <p><strong>Телефон:</strong> ${client_phone}</p>
-    <p><strong>Email:</strong> ${client_email}</p>
-    <p><strong>Адвокат:</strong> ${schedule.lawyer_name}</p>
-    <p><strong>Дата и время:</strong> ${new Date(schedule.booking_date).toLocaleString("ru-RU")}</p>
-    <p><strong>Адрес:</strong> г. Челябинск, ул. Труда, д. 156 «В» цокольный этаж, вход со двора</p>
-  `;
+    const htmlContent = `
+      <h3>Вы записались на консультацию</h3>
+      <p><strong>Клиент:</strong> ${client_name}</p>
+      <p><strong>Телефон:</strong> ${client_phone}</p>
+      <p><strong>Email:</strong> ${client_email}</p>
+      <p><strong>Адвокат:</strong> ${schedule.lawyer_name}</p>
+      <p><strong>Дата и время:</strong> ${new Date(schedule.booking_date).toLocaleString("ru-RU")}</p>
+      <p><strong>Адрес:</strong> г. Челябинск, ул. Труда, д. 156 «В» цокольный этаж, вход со двора</p>
+      <p><strong>Номер телефона для связи:</strong> 8(951)738-46-24</p>
+    `;
 
-  const { transporter, testAccount } = await createTestTransport();
+    const transporter = await createTransporter();
 
-  const info = await transporter.sendMail({
-    from: '"ПЕРСПЕКТИВА" <no-reply@example.com>',
-    to: client_email,
-    subject: "Подтверждение записи на консультацию",
-    html: htmlContent,
-  });
+    const info = await transporter.sendMail({
+      from: '"ПЕРСПЕКТИВА" <' + process.env.YANDEX_USER + '>',
+      to: client_email,
+      subject: "Запись на консультацию",
+      html: htmlContent,
+    });
 
-  console.log("Тестовое письмо отправлено:", info.messageId);
-  console.log("Смотри письмо здесь:", nodemailer.getTestMessageUrl(info));
-
-  return nodemailer.getTestMessageUrl(info);
+    console.log("Письмо отправлено:", info.messageId);
+    return info.messageId;
+    
+  } catch (error) {
+    console.error("Ошибка при отправке письма:", error);
+    throw error;
+  }
 }
 
 
@@ -89,24 +88,6 @@ module.exports.getSchedule = async (req, res) => {
     res.status(500).json({ error: 'Ошибка сервера' });
   }
 };
-
-// module.exports.createBooking = async (req, res) => {
-//     const { schedule_id, client_email, client_phone, client_name } = req.body;
-//     try {
-//       await pool.query(
-//         `INSERT INTO bookings (schedule_id, client_email, client_phone, client_name)
-//          VALUES ($1, $2, $3, $4)`,
-//         [schedule_id, client_email, client_phone, client_name]
-//       );
-  
-//       await pool.query(`UPDATE schedule SET status = TRUE WHERE schedule_id = $1`, [schedule_id]);
-  
-//       res.status(200).json({ message: "Запись успешно создана" });
-//     } catch (err) {
-//       console.error("Ошибка бронирования:", err);
-//       res.status(500).json({ error: "Ошибка сервера" });
-//     }
-// };
   
 module.exports.createBooking = async (req, res) => {
   const { schedule_id, client_email, client_phone, client_name } = req.body;
@@ -125,7 +106,7 @@ module.exports.createBooking = async (req, res) => {
     // 3. Отвечаем клиенту, чтобы модальное окно выскочило без задержек
     res.status(200).json({ message: "Запись успешно создана" });
 
-    // 4. А потом уже асинхронно отправляем письмо (но без await, чтобы не ждать)
+    // 4. А потом уже асинхронно отправляем письмо (без await, чтобы не ждать)
     sendBookingEmail(schedule_id, client_email, client_name, client_phone)
       .then(url => {
         console.log("Письмо отправлено, preview URL:", url);

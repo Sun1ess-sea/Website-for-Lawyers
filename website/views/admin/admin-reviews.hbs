@@ -1,22 +1,31 @@
 <section class="admin-reviews">
   <div class="container py-5">
-    <h2 class="admin-title">Управление отзывами</h2>
+    <h2>{{#if editReview}}Редактирование отзыва{{else}}Управление отзывами{{/if}}</h2>
 
     <!-- Форма добавления отзыва -->
-    <form action="/admin/add-review" method="POST" enctype="multipart/form-data" class="news-form">
+    <form action="{{#if editReview}}/admin/update-review/{{editReview.review_id}}{{else}}/admin/add-review{{/if}}"    method="POST" enctype="multipart/form-data" class="news-form">
       <div class="form-group">
         <label for="photo">Фотография:</label>
         <input type="file" name="photo" id="photo" required>
       </div>
       <div class="form-group">
         <label for="title">Заголовок:</label>
-        <input type="text" name="title" id="title" placeholder="Название компании/имя клиента" required>
+        <input type="text" name="title" id="title" placeholder="Название компании/имя клиента"
+        value="{{#if editReview}}{{editReview.title_review}}{{/if}}",
+        required>
       </div>
       <div class="form-group">
         <label for="description">Описание:</label>
-        <textarea name="description" id="description" rows="4" placeholder="Описание отзыва..." required></textarea>
+        <textarea name="description" id="description" rows="4" placeholder="Описание отзыва..." required
+        >{{#if editReview}}{{editReview.description_review}}{{/if}}</textarea>
       </div>
-      <button type="submit" class="create-btn d-block mx-auto">Добавить отзыв</button>
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <button type="submit" class="create-btn">
+          {{#if editReview}}Редактировать отзыв{{else}}Добавить отзыв{{/if}}
+        </button>
+        <a href="/admin/content" class="btn btn-primary">Вернуться назад</a>
+      </div>
+
     </form>
 
     <!-- Таблица отзывов -->
@@ -27,7 +36,8 @@
           <th>Фото</th>
           <th>Заголовок</th>
           <th>Описание</th>
-          <th>Действие</th>
+          <th>Изменить</th>
+          <th>Удалить</th>
         </tr>
       </thead>
       <tbody>
@@ -36,6 +46,11 @@
             <td><small>{{this.image_review}}</small></td>
             <td>{{this.title_review}}</td>
             <td>{{this.description_review}}</td>
+            <td>
+                <form method="GET" action="/admin/admin-reviews/edit/{{this.review_id}}">
+                <button class="edit-btn" type="submit">Изменить</button>
+                </form>
+            </td>
             <td>
               <form action="/admin/delete-review/{{this.review_id}}" method="POST">
                 <button type="submit" class="delete-btn">Удалить</button>

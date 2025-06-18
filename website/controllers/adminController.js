@@ -24,44 +24,6 @@ exports.logoutAdmin = (req, res) => {
     });
 };
 
-exports.showAddAdminPage = async (req, res) => {
-  try {
-    res.render('admin/add-admin', {
-      title: 'Добавление администратора',
-      user: req.user,
-    });
-  } catch (error) {
-    console.error('Ошибка при отрисовке страницы добавления администратора:', error);
-    res.status(500).send('Ошибка сервера');
-  }
-};
-
-exports.addAdmin = async (req, res) => {
-  const { login, password, admin_name } = req.body;
-
-  try {
-    const existingAdmin = await db.findAdminByLogin(login);
-    if (existingAdmin) {
-      return res.render('admin/admin-admin', {
-        message: 'Администратор с таким логином уже существует',
-      });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    await db.createAdmin({
-      login,
-      password: hashedPassword,
-      admin_name,
-    });
-
-    res.redirect('/admin/add-admin');
-  } catch (error) {
-    console.error('Ошибка при добавлении администратора:', error);
-    res.status(500).send('Ошибка сервера');
-  }
-};
-
 exports.getBookings = async (req, res) => {
   try {
     const bookings = await db.getAllBookings();
@@ -76,7 +38,6 @@ exports.deleteBooking = async (req, res) => {
   const booking_id = req.params.booking_id;
 
   try {
-    // Получаем все нужные данные
     const booking = await db.getBookingInfoById(booking_id);
 
     if (!booking) {
@@ -85,44 +46,39 @@ exports.deleteBooking = async (req, res) => {
 
     const { client_email, client_name, schedule_id, booking_date, lawyer_name } = booking;
 
-    // Удаляем запись и обновляем статус
     await db.deleteBookingById(booking_id);
     await db.setScheduleStatus(schedule_id, false);
 
-    // Редирект
-    res.redirect('/admin//moderating-bookings');
+    res.redirect('/admin/moderating-bookings');
 
     // Асинхронная отправка письма
     setImmediate(async () => {
       try {
-        const testAccount = await nodemailer.createTestAccount();
-
         const transporter = nodemailer.createTransport({
-          host: 'smtp.ethereal.email',
-          port: 587,
+          host: 'smtp.yandex.com',
+          port: 465,
+          secure: true,
           auth: {
-            user: testAccount.user,
-            pass: testAccount.pass,
+            user: process.env.YANDEX_USER,
+            pass: process.env.YANDEX_PASS,
           },
         });
 
         const htmlContent = `
-          <h3>Бронирование отменено</h3>
+          <h3>Консультация отменена</h3>
           <p><strong>Клиент:</strong> ${client_name}</p>
           <p>К сожалению, ваша запись к адвокату <strong>${lawyer_name}</strong> 
           на <strong>${new Date(booking_date).toLocaleString("ru-RU")}</strong> была отменена по техническим причинам.</p>
-          <p>Пожалуйста, свяжитесь с нами для повторной записи.</p>
+          <p>Пожалуйста, свяжитесь с нами для повторной записи через данную почту или телефон для связи 8(951)738-46-24.</p>
         `;
 
-        const info = await transporter.sendMail({
-          from: '"ПЕРСПЕКТИВА" <no-reply@example.com>',
+          const info = await transporter.sendMail({
+          from: `"ПЕРСПЕКТИВА" <${process.env.YANDEX_USER}>`,
           to: client_email,
           subject: 'Отмена записи на консультацию',
           html: htmlContent,
         });
 
-        console.log('Письмо отправлено:', info.messageId);
-        console.log('Ссылка на письмо:', nodemailer.getTestMessageUrl(info));
       } catch (mailErr) {
         console.error('Ошибка при отправке письма об отмене:', mailErr);
       }
@@ -299,7 +255,6 @@ exports.createService = async (req, res) => {
   try {
     const services = await db.getAllServices();
 
-    // Проверка на существование услуги с таким именем
     const existing = services.find(s => s.service_name.trim().toLowerCase() === service_name.trim().toLowerCase());
 
     if (existing) {
@@ -341,31 +296,21 @@ exports.showEditServicePage = async (req, res) => {
 exports.updateService = async (req, res) => {
   const { service_id } = req.params;
   const { service_name, service_price } = req.body;
-
   try {
-    // Получаем все услуги для проверки дубликатов
     const services = await db.getAllServices();
-
-    // Проверяем, есть ли услуга с таким же именем, но с другим id
     const existing = services.find(s =>
       s.service_name.trim().toLowerCase() === service_name.trim().toLowerCase() &&
       s.service_id !== Number(service_id)
     );
-
     if (existing) {
-      // Получаем текущую редактируемую услугу, чтобы отобразить ее повторно
       const editService = services.find(s => s.service_id === Number(service_id));
-
       return res.render('admin/admin-services', {
         services,
         editService,
         errorMessage: 'Услуга с таким названием уже существует'
       });
     }
-
-
     await db.updateService(service_id, service_name, service_price);
-
     res.redirect('/admin/admin-services');
   } catch (error) {
     console.error('Ошибка при обновлении услуги:', error);
@@ -398,13 +343,13 @@ exports.showNewsPage = async (req, res) => {
 
 exports.postAddNews = async (req, res) => {
     try {
-        const admin_id = req.user.admin_id; // предполагаем, что у тебя есть авторизация и req.user
+        const admin_id = req.user.admin_id;
         const { title, description, bookingDate } = req.body;
         if (!req.file) {
             return res.status(400).send('Фотография обязательна');
         }
 
-        const image_news = '/images/' + req.file.originalname;
+        const image_news = '/images/newsPhoto/' + req.file.originalname;
 
         await db.addNews({
             admin_id,
@@ -421,6 +366,30 @@ exports.postAddNews = async (req, res) => {
     }
 };
 
+exports.showEditNewsPage = async (req, res) => {
+  const newsId = req.params.news_id;
+
+  try {
+    const newsList = await db.getAllNews();
+    const query = `SELECT * FROM news WHERE news_id = $1`;
+    const result = await pool.query(query, [newsId]);
+    if (result.rows.length === 0) {
+      return res.status(404).send('Новость не найдена');
+    }
+
+    const editNews = result.rows[0];
+
+    editNews.create_date = editNews.create_date.toISOString().split('T')[0];
+
+
+
+    res.render('admin/admin-news', { newsList, editNews });
+  } catch(error) {
+    console.error(error);
+    res.status(500).send('Ошибка сервера');
+  }
+};
+
 exports.postDeleteNews = async (req, res) => {
   try {
     const newsId = req.params.news_id;
@@ -432,6 +401,37 @@ exports.postDeleteNews = async (req, res) => {
   }
 };
 
+exports.updateNews = async (req, res) => {
+  const {news_id} = req.params;
+  const {title, description, bookingDate} = req.body;
+
+  try {
+    const news = await db.getAllNews();
+    const existing = news.find(s =>
+      s.title_news.trim().toLowerCase() === title.trim().toLowerCase() &&
+      s.description_news.trim().toLowerCase() === description.trim().toLowerCase() &&
+      s.news_id !== Number(news_id)
+    );
+
+    if (existing) {
+      const editNews = news.find(s => s.news_id === Number(news_id));
+      return res.render('admin/admin-news', {
+        news,
+        editNews,
+        errorMessage: "Новость с такими данными уже существует"
+      });
+    }
+
+    const imageNews = '/images/newsPhoto/' + req.file.originalname;
+
+    await db.updateNews(news_id, title, description, bookingDate, imageNews);
+    res.redirect('/admin/admin-news');
+  } catch(error) {
+    console.error('Ошибка при обновлении новости:', news);
+    res.status(500).send('Ошибка сервера');
+  }
+};
+
 exports.showAdminReviews = async (req, res) => {
   try {
     const reviews = await db.getAllReviews();
@@ -439,6 +439,59 @@ exports.showAdminReviews = async (req, res) => {
   } catch (error) {
     console.error('Ошибка при получении отзывов:', error);
     res.status(500).send('Ошибка при загрузке отзывов');
+  }
+};
+
+exports.showEditReviewPage = async (req, res) => {
+  const reviewId = req.params.review_id;
+
+  try {
+    const reviews = await db.getAllReviews();
+    const query = `SELECT * FROM reviews WHERE review_id = $1`;
+    const result = await pool.query(query, [reviewId]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).send('Отзыв не найден');
+    }
+
+    const editReview = result.rows[0];
+
+    res.render('admin/admin-reviews', { reviews, editReview });
+  } catch(error) {
+    console.error(error);
+    res.status(500).send('Ошибка сервера');
+  }
+};
+
+exports.updateReview = async (req, res) => {
+  const {review_id} = req.params;
+  const { title, description } = req.body;
+  console.log(req.params);
+  console.log(req.body);
+  try {
+    const reviews = await db.getAllReviews();
+    const existing = reviews.find( s =>
+      s.title_review.trim().toLowerCase() === title.trim().toLowerCase() &&
+      s.description_review.trim().toLowerCase() === description.trim().toLowerCase() &&
+      s.review_id !== Number(review_id));
+
+      if (existing) {
+        const editReview = reviews.find(s => s.review_id === Number(review_id));
+        return res.render('admin/admin-reviews', {
+          reviews,
+          editReview,
+          errorMessage: "Отзыв с такими данными уже существует"
+        });
+      }
+
+      const imageReview = '/images/reviewPhoto/' + req.file.originalname;
+
+      await db.updateReview(review_id, title, description, imageReview);
+
+      res.redirect('/admin/admin-reviews');
+  } catch(error) {
+    console.error("Ошибка при обновлении отзыва:", error);
+    res.status(500).send('Ошибка сервера');
   }
 };
 
@@ -471,7 +524,6 @@ exports.showAdminLawyers = async (req, res) => {
     const lawyers = await db.getAllLawyersAdmin();
     const specializationsMap = await db.getSpecializationsForLawyers(); // { lawyer_id: [специализации] }
 
-    // Добавим специализации в каждый объект адвоката
     const enrichedLawyers = lawyers.map(lawyer => ({
       ...lawyer,
       specializations: (specializationsMap[lawyer.lawyer_id] || []).join(', ')
@@ -510,7 +562,6 @@ exports.addLawyer = async (req, res) => {
     // Проверка на дубли
     const isDuplicate = await db.checkLawyerExists(lawyer_name, lawyer_email, lawyer_image);
     if (isDuplicate) {
-      // Подгружаем всё как в showAdminLawyers
       const lawyers = await db.getAllLawyersAdmin();
       const specializationsMap = await db.getSpecializationsForLawyers();
 
@@ -566,5 +617,87 @@ exports.deleteLawyer = async (req, res) => {
   } catch (error) {
     console.error('Ошибка при удалении адвоката:', error);
     res.status(500).send('Ошибка при удалении адвоката');
+  }
+};
+
+
+exports.showEditLawyerPage = async (req, res) => {
+  const lawyerId = req.params.lawyer_id;
+
+  try {
+    const lawyers = await db.getAllLawyersAdmin();
+    const specializationMap = await db.getSpecializationsForLawyers();
+    const enrichedLawyers = lawyers.map(lawyer => ({
+      ...lawyer,
+      specializations: (specializationMap[lawyer.lawyer_id] || []).join(', ')
+    }));
+
+    const editLawyer = await db.getLawyerById(lawyerId);
+    if (!editLawyer) {
+      return res.status(404).send('Адвокат не найден');
+    }
+
+    res.render('admin/admin-lawyers', {
+      lawyers: enrichedLawyers,
+      editLawyer,
+      specializations: await db.getAllSpecializationsAdmin()
+    });
+  } catch(error) {
+    console.error('Ошибка при загрузке страницы редактирования:', error);
+    res.status(500).send('Ошибка сервера');
+  }
+};
+
+
+exports.updateLawyer = async (req, res) => {
+  const lawyerId = req.params.lawyer_id;
+
+  try {
+    const { lawyer_name, lawyer_title, lawyer_description, lawyer_experience, lawyer_email } = req.body;
+    const currentLawyer = await db.getLawyerById(lawyerId);
+    if (!currentLawyer) {
+      return res.status(404).send('Адвокат не найден');
+    }
+
+    const lawyer_image = req.file ? '/images/lawyerPhoto/' + req.file.originalname : currentLawyer.lawyer_image;
+
+    const isDuplicate = await db.checkDuplicateForUpdateLawyer(lawyer_name, lawyer_email, lawyer_image, lawyerId);
+
+    if (isDuplicate) {
+      const [lawyers, specializations] = await Promise.all([
+        db.getAllLawyersAdmin(),
+        db.getAllSpecializationsAdmin()
+      ]);
+
+      const specializationMap = await db.getSpecializationsForLawyers();
+      const enrichedLawyers = lawyers.map(lawyer => ({
+        ...lawyer,
+        specilaizations: (specializationMap[lawyer.lawyer_id] || []).join(', ')
+      }));
+
+      return res.render('admin/admin-lawyers', {
+        lawyers: enrichedLawyers,
+        specializations,
+        editLawyer: {...req.body, lawyer_id: lawyerId, lawyer_image},
+        errorMessage: 'Адвокат с таким именем, почтой или фотографией уже существует'
+      });
+    }
+
+    await db.updateLawyerData(lawyerId, {
+      lawyer_name, lawyer_title, lawyer_description,
+      lawyer_experience, lawyer_email, lawyer_image
+    });
+
+    if (req.body.specializations) {
+      const specializations = Array.isArray(req.body.specializations) ? req.body.specializations : [req.body.specializations];
+
+      await db.deleteLawyerSpecializations(lawyerId);
+      await db.insertLawyerSpecializations(lawyerId, specializations);
+    }
+
+    res.redirect('/admin/admin-lawyers');
+  } catch(error) {
+    console.error('Ошибка при обновлении адвоката:', error);
+    res.status(500).send('Ошибка сервера');
   }
 };

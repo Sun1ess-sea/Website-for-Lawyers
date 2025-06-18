@@ -7,19 +7,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const isAdminPage = body.dataset.isAdmin === "true";
 
     if (isAdminPage) {
-        // Если это страница администратора, скрываем чат-бота
         toggleChatbotVisibility(false);
     } else {
-        // Иначе (если это не страница администратора), показываем чат-бота
         toggleChatbotVisibility(true);
     }
 
-    // Функция для переключения видимости чат-бота
     function toggleChatbot() {
         chatbotContainer.classList.toggle('open');
     }
 
-    // Функция для скрытия/отображения чат-бота
     function toggleChatbotVisibility(isVisible) {
         if (chatbotIcon) {
         chatbotIcon.style.display = isVisible ? "block" : "none";
@@ -29,17 +25,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
     
-    // Функция для добавления сообщения в чат
     function addMessage(message, isBot) {
         const messageElement = document.createElement('div');
         messageElement.classList.add('message');
         messageElement.classList.add(isBot ? 'bot-message' : 'user-message');
-        messageElement.textContent = message;
+        messageElement.innerHTML = message;
         chatLog.appendChild(messageElement);
         chatLog.scrollTop = chatLog.scrollHeight;
     }
 
-    // Функция для отображения кнопок
     function displayButtons(buttons) {
         buttonContainer.innerHTML = '';
         buttons.forEach(button => {
@@ -53,7 +47,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Функция для отправки сообщения на сервер
     function sendMessageToServer(action) {
         let userMessage;
         if (action === 'consult') {
@@ -83,11 +76,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Обработчик клика на иконку чат-бота
     chatbotIcon.addEventListener('click', toggleChatbot);
 
-    // Инициализация чат-бота
-    addMessage('Здравствуйте! Чем я могу вам помочь?', true);
+    addMessage('Здравствуйте! Чем я могу Вам помочь?', true);
     const initialButtons = [
         { label: 'Консультация', action: 'consult' },
         { label: 'Цены', action: 'prices' },

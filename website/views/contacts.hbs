@@ -114,3 +114,190 @@
     </div>
   </div>
 </section>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const emailInput = document.getElementById('client_email');
+  const phoneInput = document.getElementById('client_phone');
+  const nameInput = document.getElementById('client_name');
+  const bookBtn = document.getElementById('book-btn');
+  const privacyCheckbox = document.getElementById('privacy_policy');
+  
+  // Состояние валидации полей
+  const validationState = {
+    email: false,
+    phone: false,
+    name: false,
+    privacy: false
+  };
+
+  const hints = {
+    email: "",
+    phone: "",
+    name: ""
+  };
+
+  function createHintElement(input, hintText) {
+    const hintElement = document.createElement('div');
+    hintElement.className = 'form-hint text-muted mt-1 small';
+    hintElement.textContent = hintText;
+    input.parentNode.insertBefore(hintElement, input.nextSibling);
+    return hintElement;
+  }
+
+  // Добавляем подсказки ко всем полям
+  const emailHint = createHintElement(emailInput, hints.email);
+  const phoneHint = createHintElement(phoneInput, hints.phone);
+  const nameHint = createHintElement(nameInput, hints.name);
+
+  // Управление видимостью подсказок
+  function manageHintVisibility(input, hintElement) {
+    if (input.value.trim() === '' && input !== document.activeElement) {
+      hintElement.style.display = 'none';
+    } else {
+      hintElement.style.display = 'block';
+    }
+  }
+
+  // Проверка состояния всех полей
+  function checkFormValidity() {
+    const isValid = Object.values(validationState).every(Boolean);
+    bookBtn.disabled = !isValid;
+    return isValid;
+  }
+
+  // Валидация email
+  function validateEmail() {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const value = emailInput.value.trim();
+    
+    if (value === '') {
+      emailInput.classList.remove('is-invalid');
+      emailHint.classList.remove('text-danger');
+      emailHint.textContent = hints.email;
+      validationState.email = false;
+    } else if (!emailRegex.test(value)) {
+      emailInput.classList.add('is-invalid');
+      emailHint.classList.add('text-danger');
+      emailHint.textContent = "Некорректный email. Пример: name@example.com";
+      validationState.email = false;
+    } else {
+      emailInput.classList.remove('is-invalid');
+      emailHint.classList.remove('text-danger');
+      emailHint.textContent = hints.email;
+      validationState.email = true;
+    }
+    
+    manageHintVisibility(emailInput, emailHint);
+    checkFormValidity();
+  }
+
+  // Валидация телефона
+  function validatePhone() {
+    let val = phoneInput.value.replace(/\D/g, '');
+    if (val.length > 11) val = val.slice(0, 11);
+    phoneInput.value = val;
+    
+    if (phoneInput.value.trim() === '') {
+      phoneInput.classList.remove('is-invalid');
+      phoneHint.classList.remove('text-danger');
+      phoneHint.textContent = hints.phone;
+      validationState.phone = false;
+    } else if (val.length !== 11) {
+      phoneInput.classList.add('is-invalid');
+      phoneHint.classList.add('text-danger');
+      phoneHint.textContent = "Номер должен содержать 11 цифр";
+      validationState.phone = false;
+    } else {
+      phoneInput.classList.remove('is-invalid');
+      phoneHint.classList.remove('text-danger');
+      phoneHint.textContent = hints.phone;
+      validationState.phone = true;
+    }
+    
+    manageHintVisibility(phoneInput, phoneHint);
+    checkFormValidity();
+  }
+
+  // Валидация имени
+  function validateName() {
+    const nameRegex = /^[а-яА-Яa-zA-Z\s]{2,}$/;
+    const value = nameInput.value.trim();
+    
+    if (value === '') {
+      nameInput.classList.remove('is-invalid');
+      nameHint.classList.remove('text-danger');
+      nameHint.textContent = hints.name;
+      validationState.name = false;
+    } else if (!nameRegex.test(value)) {
+      nameInput.classList.add('is-invalid');
+      nameHint.classList.add('text-danger');
+      nameHint.textContent = "Имя должно содержать только буквы и пробелы (минимум 2 символа)";
+      validationState.name = false;
+    } else {
+      nameInput.classList.remove('is-invalid');
+      nameHint.classList.remove('text-danger');
+      nameHint.textContent = hints.name;
+      validationState.name = true;
+    }
+    
+    manageHintVisibility(nameInput, nameHint);
+    checkFormValidity();
+  }
+
+  // Валидация чекбокса
+  function validateCheckbox() {
+    validationState.privacy = privacyCheckbox.checked;
+    checkFormValidity();
+  }
+
+  // Обработчики событий
+  emailInput.addEventListener('input', validateEmail);
+  emailInput.addEventListener('blur', validateEmail);
+  emailInput.addEventListener('focus', function() {
+    emailHint.style.display = 'block';
+  });
+
+  phoneInput.addEventListener('input', validatePhone);
+  phoneInput.addEventListener('blur', validatePhone);
+  phoneInput.addEventListener('focus', function() {
+    phoneHint.style.display = 'block';
+  });
+
+  nameInput.addEventListener('input', validateName);
+  nameInput.addEventListener('blur', validateName);
+  nameInput.addEventListener('focus', function() {
+    nameHint.style.display = 'block';
+  });
+
+  privacyCheckbox.addEventListener('change', validateCheckbox);
+
+  // Стили для ошибок
+  const style = document.createElement('style');
+  style.textContent = `
+    .is-invalid {
+      border-color: #dc3545 !important;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right calc(0.375em + 0.1875rem) center;
+      background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+    }
+    .form-hint {
+      font-size: 0.8rem;
+      transition: all 0.3s;
+    }
+    .text-danger {
+      color: #dc3545 !important;
+    }
+  `;
+  document.head.appendChild(style);
+
+  manageHintVisibility(emailInput, emailHint);
+  manageHintVisibility(phoneInput, phoneHint);
+  manageHintVisibility(nameInput, nameHint);
+  
+  // Блокировка кнопки при загрузке
+  bookBtn.disabled = true;
+});
+</script>

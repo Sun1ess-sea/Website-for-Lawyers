@@ -1,15 +1,13 @@
 const multer = require('multer');
 const path = require('path');
 
-// Путь к папке, которую ты используешь и вручную, и для загрузок
 const NEWS_UPLOAD_PATH = 'public/images/newsPhoto';
 
 const storageNewsPhotos = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, NEWS_UPLOAD_PATH); // сохраняем в папку
+        cb(null, NEWS_UPLOAD_PATH);
     },
     filename: function (req, file, cb) {
-        // Оставляем оригинальное имя файла
         cb(null, file.originalname);
     }
 });

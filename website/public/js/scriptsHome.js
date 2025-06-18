@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const isHomePage = window.location.pathname === "/" || window.location.pathname === "/index.html";
 
     if (isHomePage) {
-        // Только на главной странице анимация прокрутки для header
         window.addEventListener("scroll", function () {
             if (window.scrollY > window.innerHeight * 0.8) {
                 header.classList.add("scrolled");
@@ -12,11 +11,9 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     } else {
-        // На всех других страницах сразу применяем класс scrolled
         header.classList.add("scrolled");
     }
 
-    // Функция для анимации чисел
     function animateCountUp(el, target) {
         let start = 0;
         let duration = target < 100 ? 1800 : 800; // Маленькие числа: 1.8 сек, большие числа: 0.8 сек

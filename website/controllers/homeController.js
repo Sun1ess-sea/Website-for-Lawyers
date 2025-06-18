@@ -16,20 +16,19 @@ exports.showHomePage = async (req, res) => {
 exports.submitQuestion = async (req, res) => {
   const { req_name, req_email, req_phone, req_message } = req.body;
   try {
-    const testAccount = await nodemailer.createTestAccount();
-
     const transporter = nodemailer.createTransport({
-      host: 'smtp.ethereal.email',
-      port: 587,
+      host: 'smtp.yandex.com',
+      port: 465,
+      secure: true,
       auth: {
-        user: testAccount.user,
-        pass: testAccount.pass,
+        user: process.env.YANDEX_USER,
+        pass: process.env.YANDEX_PASS,
       },
     });
 
     const mailOptions = {
-      from: '"ПЕРСПЕКТИВА" <no-reply@example.com>',
-      to: 'corp@example.com',
+      from: process.env.YANDEX_USER,
+      to: process.env.YANDEX_USER,
       subject: 'Вопрос от клиента',
       html: `
         <h3>Вопрос от клиента</h3>
@@ -41,7 +40,7 @@ exports.submitQuestion = async (req, res) => {
     };
 
     const info = await transporter.sendMail(mailOptions);
-    console.log('Письмо отправлено. Просмотр по ссылке: %s', nodemailer.getTestMessageUrl(info));
+    console.log('Письмо отправлено.');
 
     res.json({ status: 'success', message: 'Ваше обращение получено. Мы свяжемся с вами в ближайшее время.' });
   } catch (error) {

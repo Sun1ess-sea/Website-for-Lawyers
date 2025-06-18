@@ -37,9 +37,13 @@
                 <div class="error-message" style="color: red; margin-bottom: 20px;">{{errorMessage}}</div>
             {{/if}}
 
-            <button type="submit" class="create-btn" id="submitBtn" disabled>
-                {{#if editService}}Сохранить изменения{{else}}Создать{{/if}}
-            </button>
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <button type="submit" class="create-btn" id="submitBtn" disabled>
+                    {{#if editService}}Сохранить изменения{{else}}Создать услугу{{/if}}
+                </button>
+                <a href="/admin/content" class="btn btn-primary">Вернуться назад</a>
+            </div>
+
             </form>
 
             <h2 class="services-table-title">Существующие услуги</h2>
@@ -109,7 +113,7 @@
         validateForm();
     });
 
-    // При загрузке страницы тоже запускаем проверку, если вдруг поля предзаполнены
+    // При загрузке страницы запускаем проверку, если поля предзаполнены
     document.addEventListener('DOMContentLoaded', () => {
         validateForm();
     });

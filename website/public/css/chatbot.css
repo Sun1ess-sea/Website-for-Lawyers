@@ -44,6 +44,10 @@
     pointer-events: auto;
 }
 
+.chatbot-container a {
+    color:#d4af37;
+}
+
 .chat-log {
     height: 350px; /* Уменьшаем высоту, чтобы оставить место для кнопок */
     overflow-y: scroll;

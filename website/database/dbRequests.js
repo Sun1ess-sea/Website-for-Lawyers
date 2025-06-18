@@ -701,6 +701,58 @@ async function deleteLawyerById (lawyer_id) {
 };
 
 
+async function updateReview(review_id, title, description, imageReview) {
+  await pool.query(
+    `UPDATE reviews SET title_review = $2, description_review = $3, image_review=$4 WHERE review_id = $1`,
+    [review_id, title, description, imageReview]
+  );
+};
+
+
+async function updateReviewPhoto(review_id, imagePath) {
+  await pool.query(`
+    UPDATE reviews SET image_review = $2 WHERE review_id = $1`, [review_id, imagePath]);
+};
+
+async function updateNews(news_id, title, description, bookingDate, imageNews) {
+  await pool.query(
+    `UPDATE news SET title_news=$1, description_news=$2, create_date=$3, image_news=$5 WHERE news_id=$4`,
+    [title, description, bookingDate, news_id, imageNews]
+  );
+};
+
+
+async function checkDuplicateForUpdateLawyer(name, email, imagePath, excludeId) {
+  const query = `
+  SELECT lawyer_id FROM lawyers
+  WHERE (lawyer_name=$1 OR lawyer_email=$2 OR lawyer_image=$3)
+  AND lawyer_id != $4
+  LIMIT 1`;
+
+  const result = await pool.query(query, [name, email, imagePath, excludeId]);
+  return result.rows.length > 0;
+};
+
+async function updateLawyerData(lawyerId, data) {
+  const query = `
+  UPDATE lawyers
+  SET lawyer_name = $1,lawyer_title = $2,
+  lawyer_description = $3, lawyer_experience = $4,
+  lawyer_email = $5, lawyer_image = $6 WHERE lawyer_id = $7`;
+
+  await pool.query(query, [
+    data.lawyer_name,
+    data.lawyer_title,
+    data.lawyer_description,
+    data.lawyer_experience,
+    data.lawyer_email,
+    data.lawyer_image,
+    lawyerId
+  ]);
+};
+
+
+
 module.exports = {
   getSixNews, getFiveReviews, getTenLawyers, getNewsPage, getTotalNewsCount, getNewsById,
   getLegalSpecializations, getLawyersBySpecialization, getScheduleByLawyer, getAllLawyers, getLawyerById,
@@ -711,6 +763,7 @@ module.exports = {
   getAllNews, addNews, deleteNews,
   getAllReviews, insertReview, deleteReviewById,
   getAllLawyersAdmin, getAllSpecializationsAdmin, getSpecializationsForLawyers, checkLawyerExists, insertLawyer,
-  insertLawyerSpecializations, deleteLawyerById, deleteLawyerSpecializations
+  insertLawyerSpecializations, deleteLawyerById, deleteLawyerSpecializations, updateReview, updateReviewPhoto, updateNews,
+  checkDuplicateForUpdateLawyer, updateLawyerData
 
 };
